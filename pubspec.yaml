@@ -16,6 +16,7 @@ dependencies:
   go_router: ^8.0.5
   flutter_bloc: ^8.0.0
   equatable: ^2.0.5
+  sensors_plus: ^3.0.2
 
 dev_dependencies:
   flutter_test:

@@ -23,7 +23,7 @@ class DeviceConnectionBloc
 
       emitter(DeviceConnectionSuccess());
     } catch (error) {
-      emitter(DeviceConnectionFailed());
+      emitter(DeviceConnectionFailure());
     }
   }
 }

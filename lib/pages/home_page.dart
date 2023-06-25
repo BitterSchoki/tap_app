@@ -23,12 +23,17 @@ class HomePage extends StatelessWidget {
                 return const ConnectButton();
               } else if (state is DeviceConnectionInProgress) {
                 return const Text('Connecting...');
-              } else if (state is DeviceConnectionFailed) {
+              } else if (state is DeviceConnectionFailure) {
                 return const Column(
                   children: [
                     Text('Connection failed'),
                     ConnectButton(),
                   ],
+                );
+              } else if (state is DeviceConnectionSuccess) {
+                return ElevatedButton(
+                  onPressed: () => context.go('/action'),
+                  child: const Text('Action'),
                 );
               } else {
                 return const SizedBox.shrink();

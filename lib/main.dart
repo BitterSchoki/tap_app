@@ -32,7 +32,10 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: 'action',
           builder: (BuildContext context, GoRouterState state) {
-            return const ActionPage();
+            return BlocProvider<DeviceActionBloc>(
+              create: (context) => DeviceActionBloc(),
+              child: const ActionPage(),
+            );
           },
         ),
       ],

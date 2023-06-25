@@ -9,4 +9,4 @@ class DeviceConnectionInProgress extends DeviceConnectionState {}
 
 class DeviceConnectionSuccess extends DeviceConnectionState {}
 
-class DeviceConnectionFailed extends DeviceConnectionState {}
+class DeviceConnectionFailure extends DeviceConnectionState {}
