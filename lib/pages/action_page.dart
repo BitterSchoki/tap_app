@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../bloc/bloc.dart';
 import '../utils/utils.dart';
 import '../widgets/widgets.dart';
-import '../bloc/bloc.dart';
 
 class ActionPage extends StatelessWidget {
   const ActionPage({super.key});
@@ -19,25 +20,20 @@ class ActionPage extends StatelessWidget {
           const SizedBox(
             height: 100,
           ),
-          BlocConsumer<DeviceActionBloc, DeviceActionState>(
-              builder: ((context, state) {
-            if (state is DeviceActionInitial ||
-                state is DeviceActionSuccess ||
-                state is DeviceActionFailure) {
+          BlocConsumer<DeviceActionBloc, DeviceActionState>(builder: ((context, state) {
+            if (state is DeviceActionInitial || state is DeviceActionSuccess || state is DeviceActionFailure) {
               return Column(
                 children: [
                   if (state is DeviceActionFailure) const Text('Action failed'),
                   CupertinoButton(
                     onPressed: () => actionBloc.add(
-                      const DeviceActionStarted(
-                          actionType: DeviceActionType.previous),
+                      const DeviceActionStarted(actionType: DeviceActionType.previous),
                     ),
                     child: const Text('Previous'),
                   ),
                   CupertinoButton(
                     onPressed: () => actionBloc.add(
-                      const DeviceActionStarted(
-                          actionType: DeviceActionType.next),
+                      const DeviceActionStarted(actionType: DeviceActionType.next),
                     ),
                     child: const Text('Next'),
                   ),

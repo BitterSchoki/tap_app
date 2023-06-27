@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
-import 'utils/utils.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tap_app/bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:tap_app/pages/pages.dart';
+
+import 'utils/utils.dart';
 
 void main() => runApp(const TapApp());
 

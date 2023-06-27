@@ -21,15 +21,10 @@ class _SensorDebugState extends State<SensorDebug> {
 
   @override
   Widget build(BuildContext context) {
-    final userAccelerometer = _userAccelerometerValues
-        ?.map((double v) => v.toStringAsFixed(1))
-        .toList();
-    final accelerometer =
-        _accelerometerValues?.map((double v) => v.toStringAsFixed(1)).toList();
-    final gyroscope =
-        _gyroscopeValues?.map((double v) => v.toStringAsFixed(1)).toList();
-    final magnetometer =
-        _magnetometerValues?.map((double v) => v.toStringAsFixed(1)).toList();
+    final userAccelerometer = _userAccelerometerValues?.map((double v) => v.toStringAsFixed(1)).toList();
+    final accelerometer = _accelerometerValues?.map((double v) => v.toStringAsFixed(1)).toList();
+    final gyroscope = _gyroscopeValues?.map((double v) => v.toStringAsFixed(1)).toList();
+    final magnetometer = _magnetometerValues?.map((double v) => v.toStringAsFixed(1)).toList();
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -98,8 +93,7 @@ class _SensorDebugState extends State<SensorDebug> {
               builder: (context) {
                 return const AlertDialog(
                   title: Text("Sensor Not Found"),
-                  content: Text(
-                      "It seems that your device doesn't support Accelerometer Sensor"),
+                  content: Text("It seems that your device doesn't support Accelerometer Sensor"),
                 );
               });
         },
@@ -119,8 +113,7 @@ class _SensorDebugState extends State<SensorDebug> {
               builder: (context) {
                 return const AlertDialog(
                   title: Text("Sensor Not Found"),
-                  content: Text(
-                      "It seems that your device doesn't support Gyroscope Sensor"),
+                  content: Text("It seems that your device doesn't support Gyroscope Sensor"),
                 );
               });
         },
@@ -140,8 +133,7 @@ class _SensorDebugState extends State<SensorDebug> {
               builder: (context) {
                 return const AlertDialog(
                   title: Text("Sensor Not Found"),
-                  content: Text(
-                      "It seems that your device doesn't support User Accelerometer Sensor"),
+                  content: Text("It seems that your device doesn't support User Accelerometer Sensor"),
                 );
               });
         },
@@ -161,8 +153,7 @@ class _SensorDebugState extends State<SensorDebug> {
               builder: (context) {
                 return const AlertDialog(
                   title: Text("Sensor Not Found"),
-                  content: Text(
-                      "It seems that your device doesn't support Magnetometer Sensor"),
+                  content: Text("It seems that your device doesn't support Magnetometer Sensor"),
                 );
               });
         },

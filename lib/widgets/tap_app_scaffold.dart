@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:tap_app/utils/utils.dart';
+
+import '../utils/utils.dart';
 
 class TapAppScaffold extends StatelessWidget {
   const TapAppScaffold({required this.child, super.key});
@@ -28,7 +29,6 @@ class _TapAppAppBar extends StatelessWidget {
     return const CupertinoSliverNavigationBar(
       leading: Icon(CupertinoIcons.arrow_right_arrow_left_square),
       largeTitle: Text(GlobalEn.appName),
-      backgroundColor: null,
     );
   }
 }

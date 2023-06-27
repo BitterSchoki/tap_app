@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
 import '../bloc/bloc.dart';
 import '../widgets/widgets.dart';
-
-import 'package:flutter/cupertino.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -16,8 +15,7 @@ class HomePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Image.asset('lib/assets/tap_app_logo.webp'),
-          BlocConsumer<DeviceConnectionBloc, DeviceConnectionState>(
-              builder: ((context, state) {
+          BlocConsumer<DeviceConnectionBloc, DeviceConnectionState>(builder: ((context, state) {
             if (state is DeviceConnectionInitial) {
               return const ConnectButton();
             } else if (state is DeviceConnectionInProgress) {
