@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'utils/utils.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tap_app/bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,8 +13,9 @@ class TapApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
+    return CupertinoApp.router(
       routerConfig: _router,
+      theme: cupertinoLight,
     );
   }
 }
