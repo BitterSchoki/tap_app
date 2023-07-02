@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -26,11 +29,33 @@ class DeviceConnectionBloc
     emitter(DeviceConnectionInProgress());
 
     try {
-      final serviceInfos = await dataProvider.startNetworkDiscovery(5000);
-      await dataProvider.connectToDevice(
-        serviceInfo: serviceInfos.first,
-        messageReceivedCallback: _messageReceived,
+      final socket = await Socket.connect("192.168.2.91", 12234);
+      print('Yo nice ' + socket.remoteAddress.address);
+
+      socket.listen(
+        (Uint8List data) {
+          final serverResponse = String.fromCharCodes(data);
+          print("Client $serverResponse");
+        },
+        onError: (error) {
+          print("Client: $error");
+          socket.destroy();
+      emitter(DeviceConnectionFailure());
+
+        },
+        onDone: () {
+          print("Client: Server Left");
+          socket.destroy();
+      emitter(DeviceConnectionFailure());
+
+        },
       );
+
+      // final serviceInfos = await dataProvider.startNetworkDiscovery(5000);
+      // await dataProvider.connectToDevice(
+      //   serviceInfo: serviceInfos.first,
+      //   messageReceivedCallback: _messageReceived,
+      // );
 
       emitter(DeviceConnectionSuccess());
     } catch (e) {

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../bloc/bloc.dart';
 import '../utils/utils.dart';
@@ -47,7 +48,8 @@ class ActionPage extends StatelessWidget {
                 ],
               );
             } else if (state is DeviceCommunicationSendInProgress) {
-              return Text('${state.actionType.toShortString()} in progress...');
+              return Text(
+                  '${state.actionType.toShortString()} in progress...');
             } else {
               return const SizedBox.shrink();
             }

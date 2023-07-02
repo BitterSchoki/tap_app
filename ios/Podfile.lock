@@ -1,20 +1,26 @@
 PODS:
   - Flutter (1.0.0)
+  - flutter_nsd (0.0.1):
+    - Flutter
   - sensors_plus (0.0.1):
     - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
+  - flutter_nsd (from `.symlinks/plugins/flutter_nsd/ios`)
   - sensors_plus (from `.symlinks/plugins/sensors_plus/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
+  flutter_nsd:
+    :path: ".symlinks/plugins/flutter_nsd/ios"
   sensors_plus:
     :path: ".symlinks/plugins/sensors_plus/ios"
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  flutter_nsd: e945908005778ba9e7466b7d4dc9ea1c758022d4
   sensors_plus: bda64198ccc7d3ccbb49e6ae17d92f67687bee20
 
 PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189
