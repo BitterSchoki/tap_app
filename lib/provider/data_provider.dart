@@ -7,7 +7,7 @@ class DataProvider {
 
   TcpSocketConnection? socketConnection;
 
-  Future<List<NsdServiceInfo>> startDiscovery(
+  Future<List<NsdServiceInfo>> startNetworkDiscovery(
     int timeOut, {
     int attempts = 1,
   }) async {
@@ -37,17 +37,17 @@ class DataProvider {
   }
 
   Future<bool> connectToDevice({
-    //required NsdServiceInfo serviceInfo,
+    required NsdServiceInfo serviceInfo,
     required Function messageReceivedCallback,
   }) async {
-/*     final hostname = serviceInfo.hostname;
+    final hostname = serviceInfo.hostname;
     final port = serviceInfo.port;
     if (hostname == null) {
       return false;
     }
     if (port == null) {
       return false;
-    } */
+    }
 
     socketConnection = TcpSocketConnection("192.168.2.91", 12234);
 
@@ -68,5 +68,13 @@ class DataProvider {
     }
 
     return false;
+  }
+
+  void sendMessage(String msg) async {
+    if (socketConnection!.isConnected()) {
+      socketConnection!.sendMessage(msg);
+    } else {
+      throw Error();
+    }
   }
 }

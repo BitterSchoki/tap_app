@@ -11,7 +11,8 @@ class ActionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final actionBloc = BlocProvider.of<DeviceActionBloc>(context);
+    final actionBloc = BlocProvider.of<DeviceCommunicationSendBloc>(context);
+
     return TapAppScaffold(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -20,38 +21,44 @@ class ActionPage extends StatelessWidget {
           const SizedBox(
             height: 100,
           ),
-          BlocConsumer<DeviceActionBloc, DeviceActionState>(builder: ((context, state) {
-            if (state is DeviceActionInitial || state is DeviceActionSuccess || state is DeviceActionFailure) {
+          BlocConsumer<DeviceCommunicationSendBloc,
+              DeviceCommunicationSendState>(builder: ((context, state) {
+            if (state is DeviceActionInitial ||
+                state is DeviceCommunicationSendMessageSuccess ||
+                state is DeviceCommunicationSendMessageFailure) {
               return Column(
                 children: [
-                  if (state is DeviceActionFailure) const Text('Action failed'),
+                  if (state is DeviceCommunicationSendMessageFailure)
+                    const Text('Action failed'),
                   CupertinoButton(
                     onPressed: () => actionBloc.add(
-                      const DeviceActionStarted(actionType: DeviceActionType.previous),
+                      const DeviceCommunicationSendMessage(
+                          actionType: DeviceActionType.previous),
                     ),
                     child: const Text('Previous'),
                   ),
                   CupertinoButton(
                     onPressed: () => actionBloc.add(
-                      const DeviceActionStarted(actionType: DeviceActionType.next),
+                      const DeviceCommunicationSendMessage(
+                          actionType: DeviceActionType.next),
                     ),
                     child: const Text('Next'),
                   ),
                 ],
               );
-            } else if (state is DeviceActionInProgress) {
+            } else if (state is DeviceCommunicationSendInProgress) {
               return Text('${state.actionType.toShortString()} in progress...');
             } else {
               return const SizedBox.shrink();
             }
           }), listener: (context, state) {
-            if (state is DeviceActionSuccess) {
+            if (state is DeviceCommunicationSendMessageSuccess) {
               final snackBar = SnackBar(
                 content: Text('${state.actionType.toShortString()} success'),
                 duration: const Duration(seconds: 1),
               );
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            } else if (state is DeviceActionFailure) {
+            } else if (state is DeviceCommunicationSendMessageFailure) {
               final snackBar = SnackBar(
                 content: Text('${state.actionType.toShortString()} failure'),
                 duration: const Duration(seconds: 1),

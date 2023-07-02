@@ -14,36 +14,48 @@ class TapApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dataProvider = DataProvider();
+    final deviceCommunicationReceiveBloc = DeviceCommunicationReceiveBloc();
+
     return CupertinoApp.router(
-      routerConfig: _router,
+      routerConfig: GoRouter(
+        routes: <RouteBase>[
+          GoRoute(
+            path: '/',
+            builder: (BuildContext context, GoRouterState state) {
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider<DeviceConnectionBloc>(
+                    create: (context) => DeviceConnectionBloc(
+                      dataProvider: dataProvider,
+                      deviceCommunicationReceiveBloc:
+                          deviceCommunicationReceiveBloc,
+                    ),
+                  ),
+                  BlocProvider<DeviceCommunicationReceiveBloc>(
+                    create: (context) => deviceCommunicationReceiveBloc,
+                  ),
+                ],
+                child: const HomePage(),
+              );
+            },
+            routes: <RouteBase>[
+              GoRoute(
+                path: 'action',
+                builder: (BuildContext context, GoRouterState state) {
+                  return BlocProvider<DeviceCommunicationSendBloc>(
+                    create: (context) => DeviceCommunicationSendBloc(
+                      dataProvider: dataProvider,
+                    ),
+                    child: const ActionPage(),
+                  );
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
       theme: cupertinoLight,
     );
   }
 }
-
-final GoRouter _router = GoRouter(
-  routes: <RouteBase>[
-    GoRoute(
-      path: '/',
-      builder: (BuildContext context, GoRouterState state) {
-        return BlocProvider<DeviceConnectionBloc>(
-          create: (context) => DeviceConnectionBloc(
-            dataProvider: DataProvider(),
-          ),
-          child: const HomePage(),
-        );
-      },
-      routes: <RouteBase>[
-        GoRoute(
-          path: 'action',
-          builder: (BuildContext context, GoRouterState state) {
-            return BlocProvider<DeviceActionBloc>(
-              create: (context) => DeviceActionBloc(),
-              child: const ActionPage(),
-            );
-          },
-        ),
-      ],
-    ),
-  ],
-);

@@ -1,52 +1,46 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_nsd/flutter_nsd.dart';
 import 'package:meta/meta.dart';
 import '../../provider/data_provider.dart';
+import '../device_communication_receive/device_communication_receive_bloc.dart';
 
 part 'device_connection_event.dart';
 part 'device_connection_state.dart';
 
 class DeviceConnectionBloc
     extends Bloc<DeviceConnectionEvent, DeviceConnectionState> {
-  DeviceConnectionBloc({required this.dataProvider})
-      : super(DeviceConnectionInitial()) {
+  DeviceConnectionBloc({
+    required this.dataProvider,
+    required this.deviceCommunicationReceiveBloc,
+  }) : super(DeviceConnectionInitial()) {
     on<DeviceConnectionStarted>((event, emit) async {
       await _deviceConnectionStarted(emit);
     });
   }
+
   final DataProvider dataProvider;
+  final DeviceCommunicationReceiveBloc deviceCommunicationReceiveBloc;
 
   Future<void> _deviceConnectionStarted(
       Emitter<DeviceConnectionState> emitter) async {
     emitter(DeviceConnectionInProgress());
 
-/*     final serviceInfo = await dataProvider.startDiscovery(5000);
-    if (serviceInfo == null) {
-      throw Error();
-    } */
+    try {
+      final serviceInfos = await dataProvider.startNetworkDiscovery(5000);
+      await dataProvider.connectToDevice(
+        serviceInfo: serviceInfos.first,
+        messageReceivedCallback: _messageReceived,
+      );
 
-    final connectionSuccessfull = await dataProvider.connectToDevice(
-      messageReceivedCallback: messageReceived,
-    );
-
-    if (connectionSuccessfull) {
       emitter(DeviceConnectionSuccess());
-    } else {
+    } catch (e) {
       emitter(DeviceConnectionFailure());
     }
   }
 
-  void messageReceived(String msg) {
-    print(msg);
-    //TODO: message receiving
+  void _messageReceived(String msg) {
+    deviceCommunicationReceiveBloc.add(
+      DeviceCommunicationMessageReceived(message: msg),
+    );
   }
-
-/*   void sendMessage(String message) {
-    if (socketConnection!.isConnected()) {
-      socketConnection!.sendMessage(message);
-    } else {
-      //throw NoConnectionError();
-    }
-  } */
 }
