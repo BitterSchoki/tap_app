@@ -1,59 +1,52 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_nsd/flutter_nsd.dart';
 import 'package:meta/meta.dart';
-import 'package:tcp_socket_connection/tcp_socket_connection.dart';
+import '../../provider/data_provider.dart';
 
 part 'device_connection_event.dart';
 part 'device_connection_state.dart';
 
 class DeviceConnectionBloc
     extends Bloc<DeviceConnectionEvent, DeviceConnectionState> {
-  DeviceConnectionBloc() : super(DeviceConnectionInitial()) {
+  DeviceConnectionBloc({required this.dataProvider})
+      : super(DeviceConnectionInitial()) {
     on<DeviceConnectionStarted>((event, emit) async {
       await _deviceConnectionStarted(emit);
     });
   }
-
-  TcpSocketConnection? socketConnection;
-
-  void messageReceived() {
-    //TODO: message receiving
-  }
+  final DataProvider dataProvider;
 
   Future<void> _deviceConnectionStarted(
       Emitter<DeviceConnectionState> emitter) async {
     emitter(DeviceConnectionInProgress());
 
-    //TODO: network discovery implement
+/*     final serviceInfo = await dataProvider.startDiscovery(5000);
+    if (serviceInfo == null) {
+      throw Error();
+    } */
 
-    const ip = "192.168.1.113";
-    const port = 43534;
+    final connectionSuccessfull = await dataProvider.connectToDevice(
+      messageReceivedCallback: messageReceived,
+    );
 
-    socketConnection = TcpSocketConnection(ip, port);
-
-    socketConnection!.enableConsolePrint(true);
-
-    try {
-      final canConnect = await socketConnection!.canConnect(5000, attempts: 3);
-
-      if (canConnect) {
-        await socketConnection!.connect(5000, messageReceived, attempts: 3);
-        socketConnection!.isConnected();
-      } else {
-        throw Error();
-      }
-
+    if (connectionSuccessfull) {
       emitter(DeviceConnectionSuccess());
-    } catch (error) {
+    } else {
       emitter(DeviceConnectionFailure());
     }
   }
 
-  void sendMessage(String message) {
+  void messageReceived(String msg) {
+    print(msg);
+    //TODO: message receiving
+  }
+
+/*   void sendMessage(String message) {
     if (socketConnection!.isConnected()) {
       socketConnection!.sendMessage(message);
     } else {
       //throw NoConnectionError();
     }
-  }
+  } */
 }

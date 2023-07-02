@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tap_app/bloc/bloc.dart';
 import 'package:tap_app/pages/pages.dart';
+import 'package:tap_app/provider/data_provider.dart';
 
 import 'utils/utils.dart';
 
@@ -26,7 +27,9 @@ final GoRouter _router = GoRouter(
       path: '/',
       builder: (BuildContext context, GoRouterState state) {
         return BlocProvider<DeviceConnectionBloc>(
-          create: (context) => DeviceConnectionBloc(),
+          create: (context) => DeviceConnectionBloc(
+            dataProvider: DataProvider(),
+          ),
           child: const HomePage(),
         );
       },
