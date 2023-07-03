@@ -7,7 +7,7 @@ abstract class DeviceCommunicationSendState extends Equatable {
   List<Object> get props => [];
 }
 
-class DeviceActionInitial extends DeviceCommunicationSendState {}
+class DeviceCommunicationSendInitial extends DeviceCommunicationSendState {}
 
 class DeviceCommunicationSendInProgress extends DeviceCommunicationSendState {
   const DeviceCommunicationSendInProgress({required this.actionType});
@@ -18,8 +18,7 @@ class DeviceCommunicationSendInProgress extends DeviceCommunicationSendState {
   List<Object> get props => [actionType];
 }
 
-class DeviceCommunicationSendMessageSuccess
-    extends DeviceCommunicationSendState {
+class DeviceCommunicationSendMessageSuccess extends DeviceCommunicationSendState {
   const DeviceCommunicationSendMessageSuccess({required this.actionType});
 
   final DeviceActionType actionType;
@@ -28,8 +27,7 @@ class DeviceCommunicationSendMessageSuccess
   List<Object> get props => [actionType];
 }
 
-class DeviceCommunicationSendMessageFailure
-    extends DeviceCommunicationSendState {
+class DeviceCommunicationSendMessageFailure extends DeviceCommunicationSendState {
   const DeviceCommunicationSendMessageFailure({required this.actionType});
 
   final DeviceActionType actionType;

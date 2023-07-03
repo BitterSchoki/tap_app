@@ -1,11 +1,16 @@
-import 'package:tcp_socket_connection/tcp_socket_connection.dart';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter_nsd/flutter_nsd.dart';
+import 'package:tap_app/utils/utils.dart';
+
+import 'data_provider_error.dart';
 
 class DataProvider {
   final flutterNsd = FlutterNsd();
   final services = <NsdServiceInfo>[];
 
-  TcpSocketConnection? socketConnection;
+  Socket? socket;
 
   Future<List<NsdServiceInfo>> startNetworkDiscovery(
     int timeOut, {
@@ -22,59 +27,62 @@ class DataProvider {
   void _startListeningForNetworks() {
     flutterNsd.stream.listen(
       (NsdServiceInfo service) {
-        print(service);
         services.add(service);
       },
       onError: (e) async {
-        if (e is NsdError) {
-          if (e.errorCode == NsdErrorCode.startDiscoveryFailed ||
-              e.errorCode == NsdErrorCode.stopDiscoveryFailed) {
-            await flutterNsd.stopDiscovery();
-          }
-        }
+        await flutterNsd.stopDiscovery();
       },
     );
   }
 
-  Future<bool> connectToDevice({
+  Future connectToDevice({
     required NsdServiceInfo serviceInfo,
+    required Duration timeout,
     required Function messageReceivedCallback,
+    required Function disconnectCallback,
   }) async {
     final hostname = serviceInfo.hostname;
     final port = serviceInfo.port;
     if (hostname == null) {
-      return false;
+      throw InvalidHostnamError();
     }
     if (port == null) {
-      return false;
+      throw InvalidPortError();
     }
 
-    socketConnection = TcpSocketConnection("192.168.2.91", 12234);
+    socket = await Socket.connect(hostname, port, timeout: timeout);
 
-    if (socketConnection == null) {
-      return false;
-    }
-
-    socketConnection!.enableConsolePrint(true);
-
-    final canConnect = await socketConnection!.canConnect(5000, attempts: 3);
-
-    if (canConnect) {
-      await socketConnection!
-          .connect(5000, messageReceivedCallback, attempts: 3);
-      if (socketConnection!.isConnected()) {
-        return true;
-      }
-    }
-
-    return false;
+    _startListeningForData(
+      messageReceivedCallback: messageReceivedCallback,
+      disconnectCallback: disconnectCallback,
+    );
   }
 
-  void sendMessage(String msg) async {
-    if (socketConnection!.isConnected()) {
-      socketConnection!.sendMessage(msg);
-    } else {
-      throw Error();
+  void _startListeningForData({
+    required Function messageReceivedCallback,
+    required Function disconnectCallback,
+  }) {
+    if (socket != null) {
+      socket!.listen(
+        (Uint8List data) {
+          final message = String.fromCharCodes(data);
+          messageReceivedCallback(message);
+        },
+        onError: (error) {
+          disconnectCallback();
+          socket!.destroy();
+        },
+        onDone: () {
+          disconnectCallback();
+          socket!.destroy();
+        },
+      );
+    }
+  }
+
+  void sendMessage(DeviceActionType actionType) async {
+    if (socket != null) {
+      socket!.write(actionType);
     }
   }
 }

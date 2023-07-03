@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 import '../bloc/bloc.dart';
 import '../utils/utils.dart';
@@ -22,34 +21,29 @@ class ActionPage extends StatelessWidget {
           const SizedBox(
             height: 100,
           ),
-          BlocConsumer<DeviceCommunicationSendBloc,
-              DeviceCommunicationSendState>(builder: ((context, state) {
-            if (state is DeviceActionInitial ||
+          BlocConsumer<DeviceCommunicationSendBloc, DeviceCommunicationSendState>(builder: ((context, state) {
+            if (state is DeviceCommunicationSendInitial ||
                 state is DeviceCommunicationSendMessageSuccess ||
                 state is DeviceCommunicationSendMessageFailure) {
               return Column(
                 children: [
-                  if (state is DeviceCommunicationSendMessageFailure)
-                    const Text('Action failed'),
+                  if (state is DeviceCommunicationSendMessageFailure) const Text('Action failed'),
                   CupertinoButton(
                     onPressed: () => actionBloc.add(
-                      const DeviceCommunicationSendMessage(
-                          actionType: DeviceActionType.previous),
+                      const DeviceCommunicationSendMessage(actionType: DeviceActionType.previous),
                     ),
                     child: const Text('Previous'),
                   ),
                   CupertinoButton(
                     onPressed: () => actionBloc.add(
-                      const DeviceCommunicationSendMessage(
-                          actionType: DeviceActionType.next),
+                      const DeviceCommunicationSendMessage(actionType: DeviceActionType.next),
                     ),
                     child: const Text('Next'),
                   ),
                 ],
               );
             } else if (state is DeviceCommunicationSendInProgress) {
-              return Text(
-                  '${state.actionType.toShortString()} in progress...');
+              return Text('${state.actionType.toShortString()} in progress...');
             } else {
               return const SizedBox.shrink();
             }
