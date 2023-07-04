@@ -8,7 +8,8 @@ import '../device_communication_receive/device_communication_receive_bloc.dart';
 part 'device_connection_event.dart';
 part 'device_connection_state.dart';
 
-class DeviceConnectionBloc extends Bloc<DeviceConnectionEvent, DeviceConnectionState> {
+class DeviceConnectionBloc
+    extends Bloc<DeviceConnectionEvent, DeviceConnectionState> {
   DeviceConnectionBloc({
     required this.dataProvider,
     required this.deviceCommunicationReceiveBloc,
@@ -25,25 +26,35 @@ class DeviceConnectionBloc extends Bloc<DeviceConnectionEvent, DeviceConnectionS
   final DataProvider dataProvider;
   final DeviceCommunicationReceiveBloc deviceCommunicationReceiveBloc;
 
-  Future<void> _deviceConnectionStarted(Emitter<DeviceConnectionState> emitter) async {
+  Future<void> _deviceConnectionStarted(
+      Emitter<DeviceConnectionState> emitter) async {
     emitter(DeviceConnectionInProgress());
 
     try {
       final serviceInfos = await dataProvider.startNetworkDiscovery(5000);
-      await dataProvider.connectToDevice(
-        serviceInfo: serviceInfos.first,
+      if (serviceInfos.isEmpty) {
+        throw Error();
+      }
+
+      final isConnected = await dataProvider.connectToDevice(
+        serviceInfo: serviceInfos,
         timeout: const Duration(milliseconds: 10000),
         messageReceivedCallback: _onMessageReceived,
         disconnectCallback: _onDisconnected,
       );
 
-      emitter(DeviceConnectionSuccess());
+      if (isConnected) {
+        emitter(DeviceConnectionSuccess());
+      } else {
+        throw Error();
+      }
     } catch (e) {
       emitter(DeviceConnectionFailure());
     }
   }
 
-  Future<void> _deviceDisconnctionStarted(Emitter<DeviceConnectionState> emitter) async {
+  Future<void> _deviceDisconnctionStarted(
+      Emitter<DeviceConnectionState> emitter) async {
     emitter(DeviceConnectionInitial());
   }
 

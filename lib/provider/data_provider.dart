@@ -1,61 +1,58 @@
 import 'dart:io';
 import 'dart:typed_data';
-
-import 'package:flutter_nsd/flutter_nsd.dart';
+import 'package:bonsoir/bonsoir.dart';
 import 'package:tap_app/utils/utils.dart';
 
 import 'data_provider_error.dart';
 
 class DataProvider {
-  final flutterNsd = FlutterNsd();
-  final services = <NsdServiceInfo>[];
-
+  static const String serviceType = '_wonderful-pml._tcp';
   Socket? socket;
 
-  Future<List<NsdServiceInfo>> startNetworkDiscovery(
+  BonsoirDiscovery discovery = BonsoirDiscovery(type: serviceType);
+
+  Future<String> startNetworkDiscovery(
     int timeOut, {
     int attempts = 1,
   }) async {
-    _startListeningForNetworks();
+    await discovery.ready;
+    discovery.eventStream!.listen((event) {
+      if (event.type == BonsoirDiscoveryEventType.discoveryServiceResolved) {
+        print('Service found : ${event.service.toString()}');
+      } else if (event.type == BonsoirDiscoveryEventType.discoveryServiceLost) {
+        print('Service lost : ${event.service.toString()}');
+      }
+    });
 
-    await flutterNsd.discoverServices('_http._tcp.');
+    await discovery.start();
 
-    await flutterNsd.stopDiscovery();
-    return services;
+    await discovery.stop();
+
+    return '';
   }
 
-  void _startListeningForNetworks() {
-    flutterNsd.stream.listen(
-      (NsdServiceInfo service) {
-        services.add(service);
-      },
-      onError: (e) async {
-        await flutterNsd.stopDiscovery();
-      },
-    );
-  }
-
-  Future connectToDevice({
-    required NsdServiceInfo serviceInfo,
+  Future<bool> connectToDevice({
+    required String serviceInfo,
     required Duration timeout,
     required Function messageReceivedCallback,
     required Function disconnectCallback,
   }) async {
-    final hostname = serviceInfo.hostname;
-    final port = serviceInfo.port;
-    if (hostname == null) {
-      throw InvalidHostnamError();
-    }
-    if (port == null) {
-      throw InvalidPortError();
-    }
+    // final hostname = serviceInfo.hostname;
+    // final port = serviceInfo.port;
+    // if (hostname == null) {
+    //   throw InvalidHostnamError();
+    // }
+    // if (port == null) {
+    //   throw InvalidPortError();
+    // }
 
-    socket = await Socket.connect(hostname, port, timeout: timeout);
+    socket = await Socket.connect('hostname', 123, timeout: timeout);
 
     _startListeningForData(
       messageReceivedCallback: messageReceivedCallback,
       disconnectCallback: disconnectCallback,
     );
+    return true;
   }
 
   void _startListeningForData({
