@@ -1,5 +1,5 @@
 import 'dart:ui';
 
 class CustomColors {
-  static const darkPurple = Color.fromARGB(255, 219, 91, 255);
+  static const darkPurple = Color.fromARGB(255, 145, 19, 218);
 }

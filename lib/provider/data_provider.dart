@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:bonsoir/bonsoir.dart';
 import 'package:tap_app/utils/utils.dart';
 
@@ -11,14 +12,21 @@ class DataProvider {
 
   BonsoirDiscovery discovery = BonsoirDiscovery(type: serviceType);
 
-  Future<String> startNetworkDiscovery(
+  Future<ResolvedBonsoirService?> startNetworkDiscovery(
     int timeOut, {
     int attempts = 1,
   }) async {
+    ResolvedBonsoirService? resolvedBonsoirService;
+
     await discovery.ready;
-    discovery.eventStream!.listen((event) {
+    discovery.eventStream!.listen((event) async {
       if (event.type == BonsoirDiscoveryEventType.discoveryServiceResolved) {
         print('Service found : ${event.service.toString()}');
+        print('Service is resolved: ${event.isServiceResolved}');
+
+        if (event.isServiceResolved) {
+          resolvedBonsoirService = event.service as ResolvedBonsoirService;
+        }
       } else if (event.type == BonsoirDiscoveryEventType.discoveryServiceLost) {
         print('Service lost : ${event.service.toString()}');
       }
@@ -28,25 +36,23 @@ class DataProvider {
 
     await discovery.stop();
 
-    return '';
+    return resolvedBonsoirService;
   }
 
   Future<bool> connectToDevice({
-    required String serviceInfo,
+    required ResolvedBonsoirService serviceInfo,
     required Duration timeout,
     required Function messageReceivedCallback,
     required Function disconnectCallback,
   }) async {
-    // final hostname = serviceInfo.hostname;
-    // final port = serviceInfo.port;
-    // if (hostname == null) {
-    //   throw InvalidHostnamError();
-    // }
-    // if (port == null) {
-    //   throw InvalidPortError();
-    // }
+    final hostname = serviceInfo.ip;
+    final port = serviceInfo.port;
 
-    socket = await Socket.connect('hostname', 123, timeout: timeout);
+    if (hostname == null) {
+      throw InvalidHostnameError();
+    }
+
+    socket = await Socket.connect(hostname, port, timeout: timeout);
 
     _startListeningForData(
       messageReceivedCallback: messageReceivedCallback,

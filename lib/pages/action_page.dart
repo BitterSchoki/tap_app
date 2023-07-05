@@ -14,63 +14,71 @@ class ActionPage extends StatelessWidget {
     final actionBloc = BlocProvider.of<DeviceCommunicationSendBloc>(context);
 
     return TapAppScaffold(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SensorDebug(),
-          const SizedBox(
-            height: 100,
-          ),
-          BlocConsumer<DeviceCommunicationSendBloc, DeviceCommunicationSendState>(builder: ((context, state) {
-            if (state is DeviceCommunicationSendInitial ||
-                state is DeviceCommunicationSendMessageSuccess ||
-                state is DeviceCommunicationSendMessageFailure) {
-              return Column(
-                children: [
-                  if (state is DeviceCommunicationSendMessageFailure) const Text('Action failed'),
-                  CupertinoButton(
-                    onPressed: () => actionBloc.add(
-                      const DeviceCommunicationSendMessage(actionType: DeviceActionType.previous),
-                    ),
-                    child: const Text('Previous'),
-                  ),
-                  CupertinoButton(
-                    onPressed: () => actionBloc.add(
-                      const DeviceCommunicationSendMessage(actionType: DeviceActionType.next),
-                    ),
-                    child: const Text('Next'),
-                  ),
-                ],
-              );
-            } else if (state is DeviceCommunicationSendInProgress) {
-              return Text('${state.actionType.toShortString()} in progress...');
-            } else {
-              return const SizedBox.shrink();
-            }
-          }), listener: (context, state) {
-            if (state is DeviceCommunicationSendMessageSuccess) {
-              final snackBar = SnackBar(
-                content: Text('${state.actionType.toShortString()} success'),
-                duration: const Duration(seconds: 1),
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            } else if (state is DeviceCommunicationSendMessageFailure) {
-              final snackBar = SnackBar(
-                content: Text('${state.actionType.toShortString()} failure'),
-                duration: const Duration(seconds: 1),
-                backgroundColor: Colors.red,
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            }
-          }),
-          // const SizedBox(
-          //   height: 100,
-          // ),
-          // CupertinoButton.filled(
-          //   onPressed: () => context.go('/'),
-          //   child: const Text('Disconnect'),
-          // ),
-        ],
+      child: BlocBuilder<ModelLoadBloc, ModelLoadState>(
+        builder: (context, state) {
+          if (state is ModelLoadSuccess) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SensorDebug(),
+                const SizedBox(
+                  height: 100,
+                ),
+                BlocConsumer<DeviceCommunicationSendBloc, DeviceCommunicationSendState>(builder: ((context, state) {
+                  if (state is DeviceCommunicationSendInitial ||
+                      state is DeviceCommunicationSendMessageSuccess ||
+                      state is DeviceCommunicationSendMessageFailure) {
+                    return Column(
+                      children: [
+                        if (state is DeviceCommunicationSendMessageFailure) const Text('Action failed'),
+                        CupertinoButton(
+                          onPressed: () => actionBloc.add(
+                            const DeviceCommunicationSendMessage(actionType: DeviceActionType.previous),
+                          ),
+                          child: const Text('Previous'),
+                        ),
+                        CupertinoButton(
+                          onPressed: () => actionBloc.add(
+                            const DeviceCommunicationSendMessage(actionType: DeviceActionType.next),
+                          ),
+                          child: const Text('Next'),
+                        ),
+                      ],
+                    );
+                  } else if (state is DeviceCommunicationSendInProgress) {
+                    return Text('${state.actionType.toShortString()} in progress...');
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                }), listener: (context, state) {
+                  if (state is DeviceCommunicationSendMessageSuccess) {
+                    final snackBar = SnackBar(
+                      content: Text('${state.actionType.toShortString()} success'),
+                      duration: const Duration(seconds: 1),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } else if (state is DeviceCommunicationSendMessageFailure) {
+                    final snackBar = SnackBar(
+                      content: Text('${state.actionType.toShortString()} failure'),
+                      duration: const Duration(seconds: 1),
+                      backgroundColor: Colors.red,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                }),
+                // const SizedBox(
+                //   height: 100,
+                // ),
+                // CupertinoButton.filled(
+                //   onPressed: () => context.go('/'),
+                //   child: const Text('Disconnect'),
+                // ),
+              ],
+            );
+          } else {
+            return const CupertinoActivityIndicator();
+          }
+        },
       ),
     );
   }

@@ -5,7 +5,7 @@ abstract class DataProviderError extends Equatable {
   List<Object?> get props => [];
 }
 
-class InvalidHostnamError extends DataProviderError {
+class InvalidHostnameError extends DataProviderError {
   @override
   List<Object?> get props => [];
 }

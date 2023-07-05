@@ -28,12 +28,17 @@ class TapApp extends StatelessWidget {
                   BlocProvider<DeviceConnectionBloc>(
                     create: (context) => DeviceConnectionBloc(
                       dataProvider: dataProvider,
-                      deviceCommunicationReceiveBloc:
-                          deviceCommunicationReceiveBloc,
+                      deviceCommunicationReceiveBloc: deviceCommunicationReceiveBloc,
                     ),
                   ),
                   BlocProvider<DeviceCommunicationReceiveBloc>(
                     create: (context) => deviceCommunicationReceiveBloc,
+                  ),
+                  BlocProvider<ModelLoadBloc>(
+                    create: (context) => ModelLoadBloc()
+                      ..add(
+                        ModelLoadStarted(),
+                      ),
                   ),
                 ],
                 child: const HomePage(),

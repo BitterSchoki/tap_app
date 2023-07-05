@@ -19,6 +19,7 @@ dependencies:
   sensors_plus: ^3.0.2
   tcp_socket_connection: ^0.3.1
   bonsoir: ^2.2.0+1
+  tflite_flutter: ^0.10.1
 
 dev_dependencies:
   flutter_test:
@@ -29,4 +30,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - lib/assets/tap_app_logo.webp
+    - lib/assets/images/tap_app_logo.webp
+    - lib/assets/models/model_combined_g.tflite
