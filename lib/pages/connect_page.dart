@@ -6,8 +6,8 @@ import 'package:tap_app/utils/utils.dart';
 import '../bloc/bloc.dart';
 import '../widgets/widgets.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class ConnectPage extends StatelessWidget {
+  const ConnectPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
                 );
               } else if (state is DeviceConnectionSuccess) {
                 return CupertinoButton.filled(
-                  onPressed: () => context.go('/action'),
+                  onPressed: () => context.go('action'),
                   child: const Text('Action'),
                 );
               } else {
@@ -49,7 +49,7 @@ class HomePage extends StatelessWidget {
               }
             }),
             listener: (context, state) {
-              if (state is DeviceConnectionSuccess) {
+              if (state is DeviceConnectionFailure) {
                 context.go('/action');
               }
             },

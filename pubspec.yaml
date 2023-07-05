@@ -20,6 +20,8 @@ dependencies:
   tcp_socket_connection: ^0.3.1
   bonsoir: ^2.2.0+1
   tflite_flutter: ^0.10.1
+  url_launcher: ^6.1.11
+  share_plus: ^7.0.2
 
 dev_dependencies:
   flutter_test:

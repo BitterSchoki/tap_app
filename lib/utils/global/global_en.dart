@@ -5,4 +5,8 @@ class GlobalEn {
   static const String connectButtonTitleFailed = "Try again";
   static const String connectButtonTitleConnecting = "Connecting ...";
   static const String connectionFailed = "Connection failed";
+  static const String shareLink = "Share Link";
+  static const String next = "Next";
+  static const String goToWebUrl = "Go to tap-app.webflow.io";
+  static const String companionAppBarTitle = "Companion App";
 }

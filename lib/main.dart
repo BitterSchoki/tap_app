@@ -21,43 +21,50 @@ class TapApp extends StatelessWidget {
       routerConfig: GoRouter(
         routes: <RouteBase>[
           GoRoute(
-            path: '/',
-            builder: (BuildContext context, GoRouterState state) {
-              return MultiBlocProvider(
-                providers: [
-                  BlocProvider<DeviceConnectionBloc>(
-                    create: (context) => DeviceConnectionBloc(
-                      dataProvider: dataProvider,
-                      deviceCommunicationReceiveBloc: deviceCommunicationReceiveBloc,
+              path: '/',
+              builder: (BuildContext context, GoRouterState state) {
+                return CompanionPage();
+              },
+              routes: [
+                GoRoute(
+                  path: 'connect',
+                  builder: (BuildContext context, GoRouterState state) {
+                    return MultiBlocProvider(
+                      providers: [
+                        BlocProvider<DeviceConnectionBloc>(
+                          create: (context) => DeviceConnectionBloc(
+                            dataProvider: dataProvider,
+                            deviceCommunicationReceiveBloc: deviceCommunicationReceiveBloc,
+                          ),
+                        ),
+                        BlocProvider<DeviceCommunicationReceiveBloc>(
+                          create: (context) => deviceCommunicationReceiveBloc,
+                        ),
+                        BlocProvider<ModelLoadBloc>(
+                          create: (context) => ModelLoadBloc()
+                            ..add(
+                              ModelLoadStarted(),
+                            ),
+                        ),
+                      ],
+                      child: const ConnectPage(),
+                    );
+                  },
+                  routes: <RouteBase>[
+                    GoRoute(
+                      path: 'action',
+                      builder: (BuildContext context, GoRouterState state) {
+                        return BlocProvider<DeviceCommunicationSendBloc>(
+                          create: (context) => DeviceCommunicationSendBloc(
+                            dataProvider: dataProvider,
+                          ),
+                          child: const ActionPage(),
+                        );
+                      },
                     ),
-                  ),
-                  BlocProvider<DeviceCommunicationReceiveBloc>(
-                    create: (context) => deviceCommunicationReceiveBloc,
-                  ),
-                  BlocProvider<ModelLoadBloc>(
-                    create: (context) => ModelLoadBloc()
-                      ..add(
-                        ModelLoadStarted(),
-                      ),
-                  ),
-                ],
-                child: const HomePage(),
-              );
-            },
-            routes: <RouteBase>[
-              GoRoute(
-                path: 'action',
-                builder: (BuildContext context, GoRouterState state) {
-                  return BlocProvider<DeviceCommunicationSendBloc>(
-                    create: (context) => DeviceCommunicationSendBloc(
-                      dataProvider: dataProvider,
-                    ),
-                    child: const ActionPage(),
-                  );
-                },
-              ),
-            ],
-          ),
+                  ],
+                ),
+              ]),
         ],
       ),
       theme: cupertinoLight,

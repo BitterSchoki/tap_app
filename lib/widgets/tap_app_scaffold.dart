@@ -3,15 +3,22 @@ import 'package:flutter/cupertino.dart';
 import '../utils/utils.dart';
 
 class TapAppScaffold extends StatelessWidget {
-  const TapAppScaffold({required this.child, super.key});
+  const TapAppScaffold({
+    required this.child,
+    this.appBarTitle = GlobalEn.appName,
+    super.key,
+  });
   final Widget child;
+  final String appBarTitle;
 
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       child: CustomScrollView(
         slivers: <Widget>[
-          const _TapAppAppBar(),
+          _TapAppAppBar(
+            appBarTitle: appBarTitle,
+          ),
           SliverFillRemaining(
             child: child,
           )
@@ -22,15 +29,19 @@ class TapAppScaffold extends StatelessWidget {
 }
 
 class _TapAppAppBar extends StatelessWidget {
-  const _TapAppAppBar();
+  const _TapAppAppBar({
+    required this.appBarTitle,
+  });
+
+  final String appBarTitle;
 
   @override
   Widget build(BuildContext context) {
-    return const CupertinoSliverNavigationBar(
+    return CupertinoSliverNavigationBar(
       // leading: Icon(CupertinoIcons.arrow_right_arrow_left_square),
-      trailing: Icon(CupertinoIcons.question_circle),
+      trailing: const Icon(CupertinoIcons.question_circle),
       largeTitle: Text(
-        GlobalEn.appName,
+        appBarTitle,
       ),
     );
   }
