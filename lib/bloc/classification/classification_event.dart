@@ -18,3 +18,19 @@ class ClassificationStarted extends ClassificationEvent {
 }
 
 class ClassificationStopped extends ClassificationEvent {}
+
+class RecordedAccelerometer extends ClassificationEvent {
+  const RecordedAccelerometer({required this.values});
+  final List<List<double>> values;
+
+  @override
+  List<Object> get props => [values];
+}
+
+class RecordedGyroscope extends ClassificationEvent {
+  const RecordedGyroscope({required this.values});
+  final List<List<double>> values;
+
+  @override
+  List<Object> get props => [values];
+}

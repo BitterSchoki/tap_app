@@ -1,9 +1,7 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sensors_plus/sensors_plus.dart' as spl;
 import 'package:tflite_flutter/tflite_flutter.dart' as tfl;
 
 part 'classification_event.dart';
@@ -12,7 +10,11 @@ part 'classification_state.dart';
 class ClassificationBloc extends Bloc<ClassificationEvent, ClassificationState> {
   ClassificationBloc() : super(ClassificationInitial()) {
     on<ClassificationEvent>((event, emit) {
-      if (event is ClassificationStarted) {
+      if (event is RecordedAccelerometer) {
+        print(event.values);
+      } else if (event is RecordedGyroscope) {
+        print(event.values);
+      } else if (event is ClassificationStarted) {
         _classificationStarted(emit, event);
       } else if (event is ClassificationStopped) {
         _classificationStopped(emit);
@@ -20,87 +22,61 @@ class ClassificationBloc extends Bloc<ClassificationEvent, ClassificationState> 
     });
   }
 
-  List<double>? _userAccelerometerValues;
-  List<List<double>>? _userAccelerometerDataWindow;
-
-  List<double>? _accelerometerValues;
-  List<double>? _gyroscopeValues;
-  final _streamSubscriptions = <StreamSubscription<dynamic>>[];
-
-  bool isClassifying = false;
+  List<List<double>> _data = [[]];
 
   void _classificationStarted(Emitter<ClassificationState> emit, ClassificationStarted event) {
     emit(ClassificationHappening());
-    isClassifying = true;
-    _initSensorStreamSubscriptions();
     _startClassification(event.interpreter);
   }
 
   void _classificationStopped(Emitter<ClassificationState> emit) {
-    for (var element in _streamSubscriptions) {
-      element.cancel();
-    }
-    isClassifying = false;
     emit(ClassificationInitial());
   }
 
-  void _initSensorStreamSubscriptions() {
-    // _streamSubscriptions.add(
-    //   spl.userAccelerometerEvents.listen(
-    //     (spl.UserAccelerometerEvent event) {
-    //       _userAccelerometerValues = <double>[event.x, event.y, event.z];
-
-    //     },
-    //     onError: (e) {},
-    //     cancelOnError: true,
-    //   ),
-    // );
-    _streamSubscriptions.add(
-      spl.accelerometerEvents.listen(
-        (spl.AccelerometerEvent event) {
-          final accelerometerValues = <double>[event.x, event.y, event.z];
-          print('${DateTime.now()} , $accelerometerValues');
-        },
-        onError: (e) {},
-        cancelOnError: true,
-      ),
-    );
-    _streamSubscriptions.add(
-      spl.gyroscopeEvents.listen(
-        (spl.GyroscopeEvent event) {
-          final gyroscopeValues = <double>[event.x, event.y, event.z];
-          print('${DateTime.now()} , $gyroscopeValues');
-        },
-        onError: (e) {},
-        cancelOnError: true,
-      ),
-    );
-  }
-
   void _startClassification(tfl.Interpreter interpreter) {
-    while (isClassifying) {
-      final data = [_userAccelerometerValues];
-      final preProcessedData = _preProcessData();
-      final input = preProcessedData;
+    final List<List<double>> data = List.from(_data);
+    final input = _preProcessData(data);
 
-      var output = List.filled(1, List.filled(1, double));
+    var output = List.filled(1, List.filled(1, double));
 
-      interpreter.run(input, output);
+    interpreter.run(input, output);
 
-      print('Classified: ${output.toString()}');
-    }
+    print('Classified: ${output.toString()}');
+
     interpreter.close();
   }
 
-  List<List<double>?> _preProcessData() {
-    return [
-      _userAccelerometerValues,
-      _accelerometerValues,
-      _gyroscopeValues,
-    ];
+  List<List<double>> _preProcessData(List<List<double>> data) {
+    final smoothed = smoothData(data, 5);
+    final normalized = normalizeData(smoothed, false);
+
+    for (int i = 0; i < normalized.length; i++) {
+      final nor = normalized[i];
+      normalized[i].add(calculateMean([nor[0], nor[1], nor[2]]));
+      normalized[i].add(calculateStandardDeviation([nor[0], nor[1], nor[2]]));
+      normalized[i].add(calculateMean([nor[3], nor[4], nor[5]]));
+      normalized[i].add(calculateStandardDeviation([nor[3], nor[4], nor[5]]));
+    }
+    print('(${normalized.length},${normalized[0].length})');
+    print(normalized[0]);
+    return normalized;
   }
 
-  List<List<double>> normalizeData(List<List<double>> data, bool labeled, bool both) {
+  double calculateMean(List<double> numbers) {
+    double sum = numbers.reduce((value, element) => value + element);
+    double mean = sum / numbers.length;
+    return mean;
+  }
+
+  double calculateStandardDeviation(List<double> numbers) {
+    double mean = calculateMean(numbers);
+    double sumOfSquaredDifferences = numbers.fold(0, (value, element) => value + pow(element - mean, 2));
+    double variance = sumOfSquaredDifferences / numbers.length;
+    double standardDeviation = sqrt(variance);
+    return standardDeviation;
+  }
+
+  List<List<double>> normalizeData(List<List<double>> data, bool labeled) {
     // Extract the sensor data columns
     List<List<double>> accelerometerData = [];
     List<List<double>> gyroscopeData = [];
@@ -173,5 +149,39 @@ class ClassificationBloc extends Bloc<ClassificationEvent, ClassificationState> 
     }
 
     return normalizedData;
+  }
+
+  List<List<double>> smoothData(List<List<double>> data, int windowSize) {
+    List<List<double>> smoothedData = List.from(data);
+
+    for (int k = 0; k < 11; k++) {
+      List<double> columnData = [];
+      for (List<double> row in smoothedData) {
+        columnData.add(row[k]);
+      }
+
+      List<double> smoothedColumnData = [];
+
+      for (int i = 0; i < columnData.length; i++) {
+        double sum = 0.0;
+        int count = 0;
+
+        for (int j = i - windowSize ~/ 2; j <= i + windowSize ~/ 2; j++) {
+          if (j >= 0 && j < columnData.length) {
+            sum += columnData[j];
+            count++;
+          }
+        }
+
+        double smoothedValue = sum / count;
+        smoothedColumnData.add(smoothedValue);
+      }
+
+      for (int i = 0; i < smoothedData.length; i++) {
+        smoothedData[i][k] = smoothedColumnData[i];
+      }
+    }
+
+    return smoothedData;
   }
 }

@@ -18,7 +18,6 @@ class CompanionPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          SensorDebug(),
           CupertinoButton(
             child: const Text(GlobalEn.goToWebUrl),
             onPressed: () => _launchUrl(_webUrl),

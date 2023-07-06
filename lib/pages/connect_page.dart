@@ -41,7 +41,7 @@ class ConnectPage extends StatelessWidget {
                 );
               } else if (state is DeviceConnectionSuccess) {
                 return CupertinoButton.filled(
-                  onPressed: () => context.go('action'),
+                  onPressed: () => context.go('/action'),
                   child: const Text('Action'),
                 );
               } else {

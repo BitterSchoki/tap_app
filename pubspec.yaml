@@ -22,6 +22,7 @@ dependencies:
   tflite_flutter: ^0.10.1
   url_launcher: ^6.1.11
   share_plus: ^7.0.2
+  permission_handler: ^10.4.1
 
 dev_dependencies:
   flutter_test:
