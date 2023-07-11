@@ -105,7 +105,6 @@ class _SensorDebugState extends State<SensorDebug> {
         (AccelerometerEvent event) {
           setState(() {
             _accelerometerValues = <double>[event.x, event.y, event.z];
-            print('${DateTime.now()} , $_accelerometerValues');
           });
         },
         onError: (e) {
@@ -126,7 +125,6 @@ class _SensorDebugState extends State<SensorDebug> {
         (GyroscopeEvent event) {
           setState(() {
             _gyroscopeValues = <double>[event.x, event.y, event.z];
-            print('${DateTime.now()} , $_gyroscopeValues');
           });
         },
         onError: (e) {

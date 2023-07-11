@@ -7,7 +7,8 @@ import 'package:tflite_flutter/tflite_flutter.dart' as tfl;
 part 'classification_event.dart';
 part 'classification_state.dart';
 
-class ClassificationBloc extends Bloc<ClassificationEvent, ClassificationState> {
+class ClassificationBloc
+    extends Bloc<ClassificationEvent, ClassificationState> {
   ClassificationBloc() : super(ClassificationInitial()) {
     on<ClassificationEvent>((event, emit) {
       if (event is RecordedAccelerometer) {
@@ -22,18 +23,43 @@ class ClassificationBloc extends Bloc<ClassificationEvent, ClassificationState> 
     });
   }
 
-  List<List<double>> _data = [[]];
+  tfl.Interpreter? interpreter;
+  final List<List<double>> _data = List.filled(11, List.filled(10, 0));
 
-  void _classificationStarted(Emitter<ClassificationState> emit, ClassificationStarted event) {
-    emit(ClassificationHappening());
-    _startClassification(event.interpreter);
+  bool hasAccelerometerInput = false;
+  bool hasGyroscopeInput = false;
+
+  void _recordedAccelerometer(RecordedAccelerometer event) {
+    if (hasGyroscopeInput) {
+      hasGyroscopeInput = false;
+      final data = event.values;
+      _startClassification();
+    } else {
+      hasAccelerometerInput = true;
+    }
+  }
+
+  void _recordedGyroscope(RecordedGyroscope event) {
+      if (hasAccelerometerInput) {
+      hasAccelerometerInput = false;
+      final data = event.values;
+      _startClassification();
+    } else {
+      hasGyroscopeInput = true;
+    }
+  }
+
+  void _classificationStarted(
+      Emitter<ClassificationState> emit, ClassificationStarted event) {
+    emit(ClassificationInterpreterSet());
+    interpreter = event.interpreter;
   }
 
   void _classificationStopped(Emitter<ClassificationState> emit) {
     emit(ClassificationInitial());
   }
 
-  void _startClassification(tfl.Interpreter interpreter) {
+  void _startClassification() {
     final List<List<double>> data = List.from(_data);
     final input = _preProcessData(data);
 
@@ -70,7 +96,8 @@ class ClassificationBloc extends Bloc<ClassificationEvent, ClassificationState> 
 
   double calculateStandardDeviation(List<double> numbers) {
     double mean = calculateMean(numbers);
-    double sumOfSquaredDifferences = numbers.fold(0, (value, element) => value + pow(element - mean, 2));
+    double sumOfSquaredDifferences =
+        numbers.fold(0, (value, element) => value + pow(element - mean, 2));
     double variance = sumOfSquaredDifferences / numbers.length;
     double standardDeviation = sqrt(variance);
     return standardDeviation;
@@ -87,7 +114,8 @@ class ClassificationBloc extends Bloc<ClassificationEvent, ClassificationState> 
     }
 
     // Normalize the accelerometer data
-    List<List<double>> normalizedAccelerometer = normalizeColumns(accelerometerData);
+    List<List<double>> normalizedAccelerometer =
+        normalizeColumns(accelerometerData);
 
     // Normalize the gyroscope data
     List<List<double>> normalizedGyroscope = normalizeColumns(gyroscopeData);
@@ -121,7 +149,8 @@ class ClassificationBloc extends Bloc<ClassificationEvent, ClassificationState> 
     return mean;
   }
 
-  List<double> calculateColumnStandardDeviation(List<List<double>> data, List<double> mean) {
+  List<double> calculateColumnStandardDeviation(
+      List<List<double>> data, List<double> mean) {
     List<double> std = List.filled(data[0].length, 0.0);
 
     for (List<double> row in data) {

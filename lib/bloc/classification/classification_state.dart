@@ -9,6 +9,6 @@ abstract class ClassificationState extends Equatable {
 
 class ClassificationInitial extends ClassificationState {}
 
-class ClassificationHappening extends ClassificationState {}
+class ClassificationInterpreterSet extends ClassificationState {}
 
 class ClassificationError extends ClassificationState {}

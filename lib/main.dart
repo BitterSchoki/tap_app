@@ -51,6 +51,7 @@ class TapApp extends StatelessWidget {
                 path: 'action',
                 builder: (BuildContext context, GoRouterState state) {
                   final classificationBloc = ClassificationBloc();
+
                   return MultiBlocProvider(
                     providers: [
                       BlocProvider<DeviceCommunicationSendBloc>(
@@ -67,7 +68,7 @@ class TapApp extends StatelessWidget {
                       BlocProvider<RecordingBloc>(
                         create: (context) => RecordingBloc(
                           classificationBloc: classificationBloc,
-                        )..add(RecordingStarted()),
+                        ),
                       ),
                       BlocProvider<ModelLoadBloc>.value(
                         value: modelLoadBloc,
