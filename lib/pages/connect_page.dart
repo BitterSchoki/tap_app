@@ -39,17 +39,12 @@ class ConnectPage extends StatelessWidget {
                     ),
                   ],
                 );
-              } else if (state is DeviceConnectionSuccess) {
-                return CupertinoButton.filled(
-                  onPressed: () => context.go('/action'),
-                  child: const Text('Action'),
-                );
               } else {
                 return const SizedBox.shrink();
               }
             }),
             listener: (context, state) {
-              if (state is DeviceConnectionFailure) {
+              if (state is DeviceConnectionSuccess) {
                 context.go('/action');
               }
             },

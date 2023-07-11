@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/bloc.dart';
@@ -25,7 +26,12 @@ class ConnectButton extends StatelessWidget {
                 DeviceConnectionStarted(),
               );
             },
-      child: Text(title),
+      child: Text(
+        title,
+        style: const TextStyle(
+          color: Colors.white,
+        ),
+      ),
     );
   }
 }
