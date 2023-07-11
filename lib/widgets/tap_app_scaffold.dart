@@ -38,10 +38,34 @@ class _TapAppAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoSliverNavigationBar(
-      // leading: Icon(CupertinoIcons.arrow_right_arrow_left_square),
-      trailing: const Icon(CupertinoIcons.question_circle),
+      trailing: GestureDetector(
+        child: const Icon(
+          CupertinoIcons.question_circle,
+        ),
+        onTap: () {
+          _showAlertDialog(context);
+        },
+      ),
       largeTitle: Text(
         appBarTitle,
+      ),
+    );
+  }
+
+  void _showAlertDialog(BuildContext context) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text('Need help?'),
+        content: const Text('Go to download...'),
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Understand'),
+          ),
+        ],
       ),
     );
   }

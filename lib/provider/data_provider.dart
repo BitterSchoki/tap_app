@@ -58,6 +58,12 @@ class DataProvider {
     return true;
   }
 
+  void disconnect() {
+    if (socket != null) {
+      socket!.close();
+    }
+  }
+
   void _startListeningForData({
     required Function messageReceivedCallback,
     required Function disconnectCallback,

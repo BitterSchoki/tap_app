@@ -55,6 +55,7 @@ class DeviceConnectionBloc
 
   Future<void> _deviceDisconnctionStarted(
       Emitter<DeviceConnectionState> emitter) async {
+    dataProvider.disconnect();
     emitter(DeviceConnectionInitial());
   }
 

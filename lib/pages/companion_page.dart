@@ -28,7 +28,7 @@ class CompanionPage extends StatelessWidget {
           ),
           CupertinoButton(
             child: const Text(GlobalEn.next),
-            onPressed: () => context.go('/connect'),
+            onPressed: () => context.push('/connect'),
           ),
         ],
       ),

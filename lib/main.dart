@@ -19,6 +19,10 @@ class TapApp extends StatelessWidget {
     final dataProvider = DataProvider();
     final modelLoadBloc = ModelLoadBloc();
     final deviceCommunicationReceiveBloc = DeviceCommunicationReceiveBloc();
+    final deviceConnectionBloc = DeviceConnectionBloc(
+      dataProvider: dataProvider,
+      deviceCommunicationReceiveBloc: deviceCommunicationReceiveBloc,
+    );
 
     return CupertinoApp.router(
       routerConfig: GoRouter(
@@ -36,66 +40,62 @@ class TapApp extends StatelessWidget {
             },
             routes: [
               GoRoute(
-                  path: 'connect',
-                  builder: (BuildContext context, GoRouterState state) {
-                    return MultiBlocProvider(
-                      providers: [
-                        BlocProvider<DeviceConnectionBloc>(
-                          create: (context) => DeviceConnectionBloc(
-                            dataProvider: dataProvider,
-                            deviceCommunicationReceiveBloc:
-                                deviceCommunicationReceiveBloc,
-                          ),
-                        ),
-                        BlocProvider<ModelLoadBloc>(
-                          create: (context) =>
-                              modelLoadBloc..add(ModelLoadStarted()),
-                        ),
-                      ],
-                      child: const ConnectPage(),
-                    );
-                  },
-                  routes: [
-                    GoRoute(
-                      path: 'action',
-                      builder: (BuildContext context, GoRouterState state) {
-                        final classificationBloc = ClassificationBloc();
-
-                        return MultiBlocProvider(
-                          providers: [
-                            BlocProvider<DeviceCommunicationSendBloc>(
-                              create: (context) => DeviceCommunicationSendBloc(
-                                dataProvider: dataProvider,
-                              ),
-                            ),
-                            BlocProvider<DeviceCommunicationReceiveBloc>(
-                              create: (context) =>
-                                  deviceCommunicationReceiveBloc,
-                            ),
-                            BlocProvider<ClassificationBloc>(
-                              create: (context) => classificationBloc,
-                            ),
-                            BlocProvider<RecordingBloc>(
-                              create: (context) => RecordingBloc(
-                                classificationBloc: classificationBloc,
-                              ),
-                            ),
-                          ],
-                          child: const ActionPage(),
-                        );
-                      },
-                    ),
-                  ]),
+                path: 'connect',
+                builder: (BuildContext context, GoRouterState state) {
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider<DeviceConnectionBloc>(
+                          create: (context) => deviceConnectionBloc),
+                      BlocProvider<ModelLoadBloc>(
+                        create: (context) =>
+                            modelLoadBloc..add(ModelLoadStarted()),
+                      ),
+                    ],
+                    child: const ConnectPage(),
+                  );
+                },
+              ),
               GoRoute(
                 path: 'companion',
                 builder: (BuildContext context, GoRouterState state) {
-                  return const TutorialPage();
+                  return const CompanionPage();
                 },
               ),
               GoRoute(
                 path: 'onboarding',
                 builder: (BuildContext context, GoRouterState state) {
                   return const OnboardingPage();
+                },
+              ),
+              GoRoute(
+                path: 'action',
+                builder: (BuildContext context, GoRouterState state) {
+                  final classificationBloc = ClassificationBloc();
+
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider<DeviceCommunicationSendBloc>(
+                        create: (context) => DeviceCommunicationSendBloc(
+                          dataProvider: dataProvider,
+                        ),
+                      ),
+                      BlocProvider<DeviceCommunicationReceiveBloc>(
+                        create: (context) => deviceCommunicationReceiveBloc,
+                      ),
+                      BlocProvider<ClassificationBloc>(
+                        create: (context) => classificationBloc,
+                      ),
+                      BlocProvider<RecordingBloc>(
+                        create: (context) => RecordingBloc(
+                          classificationBloc: classificationBloc,
+                        ),
+                      ),
+                      BlocProvider<DeviceConnectionBloc>.value(
+                        value: deviceConnectionBloc,
+                      )
+                    ],
+                    child: const ActionPage(),
+                  );
                 },
               ),
             ],

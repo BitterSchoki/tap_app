@@ -50,12 +50,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     padding: const EdgeInsets.all(25.0),
                     child: ClipRect(
                       child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                        filter: ImageFilter.blur(
+                          sigmaX: 10.0,
+                          sigmaY: 10.0,
+                        ),
                         child: CupertinoButton(
                           color: Colors.grey.shade200.withOpacity(0.5),
                           onPressed: () {
                             isLastPage
-                                ? context.push("/companion")
+                                ? context.push('/companion')
                                 : _controller.nextPage(
                                     duration: const Duration(
                                       milliseconds: 400,
@@ -80,6 +83,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       dotColor: CustomColors.dotColor,
                       activeDotColor: Colors.white,
                     ),
+                    onDotClicked: (index) {
+                      _controller.animateToPage(
+                        index,
+                        duration: const Duration(
+                          milliseconds: 400,
+                        ),
+                        curve: Curves.easeOut,
+                      );
+                    },
                   ),
                 ],
               ),
