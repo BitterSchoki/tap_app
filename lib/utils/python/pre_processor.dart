@@ -4,13 +4,13 @@ class PreProcessor extends Flython {
   Future<dynamic> preprocessData({
     required List<List<double>> accelerometerData,
     required List<List<double>> gyroscopeData,
-    required List<List<double>> outputFile,
+    required List<List<double>> ouput,
   }) async {
     var command = {
-      "cmd": 1,
+      "cmd": 0,
       "accelerometerData": accelerometerData,
       "gyroscopeData": gyroscopeData,
-      "output": outputFile,
+      "output": ouput,
     };
     return await runCommand(command);
   }

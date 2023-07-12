@@ -44,7 +44,7 @@ class ConnectPage extends StatelessWidget {
               }
             }),
             listener: (context, state) {
-              if (state is DeviceConnectionFailure) {
+              if (state is DeviceConnectionSuccess) {
                 context.push('/action');
               }
             },

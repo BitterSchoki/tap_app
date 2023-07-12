@@ -1,3 +1,4 @@
+import 'package:bonsoir/bonsoir.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,8 +9,7 @@ import '../device_communication_receive/device_communication_receive_bloc.dart';
 part 'device_connection_event.dart';
 part 'device_connection_state.dart';
 
-class DeviceConnectionBloc
-    extends Bloc<DeviceConnectionEvent, DeviceConnectionState> {
+class DeviceConnectionBloc extends Bloc<DeviceConnectionEvent, DeviceConnectionState> {
   DeviceConnectionBloc({
     required this.dataProvider,
     required this.deviceCommunicationReceiveBloc,
@@ -26,18 +26,28 @@ class DeviceConnectionBloc
   final DataProvider dataProvider;
   final DeviceCommunicationReceiveBloc deviceCommunicationReceiveBloc;
 
-  Future<void> _deviceConnectionStarted(
-      Emitter<DeviceConnectionState> emitter) async {
+  Future<void> _deviceConnectionStarted(Emitter<DeviceConnectionState> emitter) async {
     emitter(DeviceConnectionInProgress());
 
     try {
-      //final serviceInfo = await dataProvider.startNetworkDiscovery(5000);
-      // if (serviceInfo == null) {
-      //   throw Error();
-      // }
+      final model = dataProvider.startNetworkDiscovery(5000);
+      await Future.delayed(Duration(seconds: 2));
+      final discoveredServices = model.discoveredServices;
+
+      print(discoveredServices);
+
+      if (discoveredServices.isEmpty) {
+        const resolvedBonsoirService = ResolvedBonsoirService(
+          ip: '10.163.181.31',
+          port: 12345,
+          name: 'tapApp2',
+          type: '_tapapp2._tcp',
+        );
+        discoveredServices.add(resolvedBonsoirService);
+      }
 
       final isConnected = await dataProvider.connectToDevice(
-        serviceInfo: '123',
+        serviceInfo: discoveredServices.first,
         timeout: const Duration(milliseconds: 10000),
         messageReceivedCallback: _onMessageReceived,
         disconnectCallback: _onDisconnected,
@@ -53,8 +63,7 @@ class DeviceConnectionBloc
     }
   }
 
-  Future<void> _deviceDisconnctionStarted(
-      Emitter<DeviceConnectionState> emitter) async {
+  Future<void> _deviceDisconnctionStarted(Emitter<DeviceConnectionState> emitter) async {
     dataProvider.disconnect();
     emitter(DeviceConnectionInitial());
   }

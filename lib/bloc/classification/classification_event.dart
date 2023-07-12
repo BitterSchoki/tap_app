@@ -17,8 +17,6 @@ class ClassificationStarted extends ClassificationEvent {
   List<Object> get props => [interpreter];
 }
 
-class ClassificationStopped extends ClassificationEvent {}
-
 class RecordedAccelerometer extends ClassificationEvent {
   const RecordedAccelerometer({required this.values});
   final List<List<double>> values;

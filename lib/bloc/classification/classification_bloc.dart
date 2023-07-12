@@ -1,12 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tflite_flutter/tflite_flutter.dart' as tfl;
+
 import '../../utils/python/python.dart';
+
 part 'classification_event.dart';
 part 'classification_state.dart';
 
-class ClassificationBloc
-    extends Bloc<ClassificationEvent, ClassificationState> {
+class ClassificationBloc extends Bloc<ClassificationEvent, ClassificationState> {
   ClassificationBloc() : super(ClassificationInitial()) {
     on<ClassificationEvent>((event, emit) {
       if (event is RecordedAccelerometer) {
@@ -15,13 +16,12 @@ class ClassificationBloc
         _recordedGyroscope(event);
       } else if (event is ClassificationStarted) {
         _classificationStarted(emit, event);
-      } else if (event is ClassificationStopped) {
-        _classificationStopped(emit);
       }
     });
   }
 
   tfl.Interpreter? interpreter;
+  final preProcessor = PreProcessor();
 
   bool hasAccelerometerInput = false;
   bool hasGyroscopeInput = false;
@@ -49,35 +49,28 @@ class ClassificationBloc
     }
   }
 
-  void _classificationStarted(
-      Emitter<ClassificationState> emit, ClassificationStarted event) {
+  void _classificationStarted(Emitter<ClassificationState> emit, ClassificationStarted event) async {
     emit(ClassificationInterpreterSet());
     interpreter = event.interpreter;
-  }
-
-  void _classificationStopped(Emitter<ClassificationState> emit) {
-    emit(ClassificationInitial());
+    await preProcessor.initialize("python", '../../../python/main.py', false);
   }
 
   void _startClassification() async {
-    print(_accelerometerData);
-    print(_gyroscopeData);
-
     final prePorcessedData = List.filled(11, List.filled(10, 0.0));
 
-    final preProcessor = PreProcessor();
-    await preProcessor.initialize("python", '../../../python/main.py', false);
     await preProcessor.preprocessData(
       accelerometerData: _accelerometerData,
       gyroscopeData: _gyroscopeData,
-      outputFile: prePorcessedData,
+      ouput: prePorcessedData,
     );
 
     final inputData = prePorcessedData;
     var output = List.filled(1, List.filled(1, double));
 
-    interpreter!.run(inputData, output);
-    interpreter!.close();
+    if (interpreter != null) {
+      interpreter!.run(inputData, output);
+      interpreter!.close();
+    }
 
     print('Classified: ${output.toString()}');
   }

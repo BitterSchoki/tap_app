@@ -12,6 +12,9 @@ PODS:
     - Flutter
   - share_plus (0.0.1):
     - Flutter
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
   - TensorFlowLiteC (2.12.0):
     - TensorFlowLiteC/Core (= 2.12.0)
   - TensorFlowLiteC/Core (2.12.0)
@@ -44,6 +47,7 @@ DEPENDENCIES:
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - sensors_plus (from `.symlinks/plugins/sensors_plus/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - tflite_flutter (from `.symlinks/plugins/tflite_flutter/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
@@ -65,6 +69,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sensors_plus/ios"
   share_plus:
     :path: ".symlinks/plugins/share_plus/ios"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   tflite_flutter:
     :path: ".symlinks/plugins/tflite_flutter/ios"
   url_launcher_ios:
@@ -77,6 +83,7 @@ SPEC CHECKSUMS:
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   sensors_plus: bda64198ccc7d3ccbb49e6ae17d92f67687bee20
   share_plus: 599aa54e4ea31d4b4c0e9c911bcc26c55e791028
+  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   TensorFlowLiteC: 20785a69299185a379ba9852b6625f00afd7984a
   TensorFlowLiteSwift: 3a4928286e9e35bdd3e17970f48e53c80d25e793
   tflite_flutter: 9433d086a3060431bbc9f3c7c20d017db0e72d08
@@ -84,4 +91,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1
