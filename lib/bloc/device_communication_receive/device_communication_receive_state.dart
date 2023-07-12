@@ -12,10 +12,10 @@ class DeviceCommunicationReceiveInitial
 
 class DeviceCommunicationMessageReceivedSuccess
     extends DeviceCommunicationReceiveState {
-  const DeviceCommunicationMessageReceivedSuccess({required this.message});
+  const DeviceCommunicationMessageReceivedSuccess({required this.messages});
 
-  final String message;
+  final List<String> messages;
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [messages];
 }

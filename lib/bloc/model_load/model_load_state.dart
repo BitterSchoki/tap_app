@@ -13,12 +13,14 @@ class ModelLoadInProgress extends ModelLoadState {}
 
 class ModelLoadSuccess extends ModelLoadState {
   final tfl.Interpreter interpreter;
+  final PreProcessor preProcessor;
   const ModelLoadSuccess({
     required this.interpreter,
+    required this.preProcessor,
   });
 
   @override
-  List<Object> get props => [interpreter];
+  List<Object> get props => [interpreter, preProcessor];
 }
 
 class ModelLoadFailure extends ModelLoadState {}

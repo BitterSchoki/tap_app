@@ -13,7 +13,7 @@ class Shell extends StatelessWidget {
         if (state is ShowCompanionSuccess) {
           context.push('/onboarding');
         } else if (state is DontShowCompanionSuccess) {
-          context.push('/onboarding');
+          context.push('/connect');
         }
       },
       child: const CupertinoActivityIndicator(),

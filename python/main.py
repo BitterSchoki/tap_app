@@ -2,7 +2,6 @@ import argparse
 import json
 import sys
 
-import cv2
 
 CMD_SYS_VERSION = 0
 CMD_TO_GRAY = 1

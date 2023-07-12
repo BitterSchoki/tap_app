@@ -14,43 +14,68 @@ class ActionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TapAppScaffold(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(
-            onPressed: () {
-              BlocProvider.of<RecordingBloc>(context).add(RecordingStarted());
-              final modelLoadState = BlocProvider.of<ModelLoadBloc>(context).state;
-              if (modelLoadState is ModelLoadSuccess) {
-                BlocProvider.of<ClassificationBloc>(context).add(
-                  ClassificationStarted(
-                    interpreter: modelLoadState.interpreter,
-                  ),
-                );
-              }
-            },
-            child: Text('go'),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(50.0),
-            child: SlideAction(
-              text: "Disconnect",
-              elevation: 0,
-              innerColor: CustomColors.darkPurple,
-              outerColor: Colors.white,
-              sliderButtonIcon: const Icon(
-                Icons.cancel,
-                color: Colors.white,
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 25.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              BlocBuilder<DeviceCommunicationReceiveBloc,
+                  DeviceCommunicationReceiveState>(
+                builder: (context, state) {
+                  if (state is DeviceCommunicationMessageReceivedSuccess) {
+                    final messages = state.messages.map(
+                      (msg) => Text(msg),
+                    );
+                    return ListView(
+                      children: [
+                        ...messages,
+                      ],
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
               ),
-              onSubmit: () async {
-                BlocProvider.of<RecordingBloc>(context).add(
-                  RecordingStopped(),
-                );
-                context.push('/');
-              },
-            ),
+              ElevatedButton(
+                onPressed: () {
+                  BlocProvider.of<RecordingBloc>(context)
+                      .add(RecordingStarted());
+                  final modelLoadState =
+                      BlocProvider.of<ModelLoadBloc>(context).state;
+                  if (modelLoadState is ModelLoadSuccess) {
+                    BlocProvider.of<ClassificationBloc>(context).add(
+                      ClassificationStarted(
+                        interpreter: modelLoadState.interpreter,
+                        preProcessor: modelLoadState.preProcessor,
+                      ),
+                    );
+                  }
+                },
+                child: const Text('Start'),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(50.0),
+                child: SlideAction(
+                  text: "Disconnect",
+                  elevation: 0,
+                  innerColor: CustomColors.darkPurple,
+                  outerColor: Colors.white,
+                  sliderButtonIcon: const Icon(
+                    Icons.cancel,
+                    color: Colors.white,
+                  ),
+                  onSubmit: () async {
+                    BlocProvider.of<RecordingBloc>(context).add(
+                      RecordingStopped(),
+                    );
+                    context.push('/connect');
+                  },
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

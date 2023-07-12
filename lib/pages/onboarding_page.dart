@@ -26,6 +26,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       body: Stack(
         children: [
           PageView(
+            physics: const ClampingScrollPhysics(),
             onPageChanged: (index) {
               setState(() {
                 isLastPage = (index == pageCount - 1);
@@ -39,10 +40,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
               OnboardingTap(),
             ],
           ),
-          Container(
-            padding: const EdgeInsets.all(25.0),
-            alignment: Alignment.center,
-            child: SafeArea(
+          SafeArea(
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 25.0),
+              alignment: Alignment.center,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [

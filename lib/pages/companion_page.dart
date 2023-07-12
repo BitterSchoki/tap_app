@@ -15,22 +15,32 @@ class CompanionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return TapAppScaffold(
       appBarTitle: GlobalEn.companionAppBarTitle,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          CupertinoButton(
-            child: const Text(GlobalEn.goToWebUrl),
-            onPressed: () => _launchUrl(_webUrl),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 25.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              const SizedBox(),
+              Column(
+                children: [
+                  CupertinoButton(
+                    child: const Text(GlobalEn.goToWebUrl),
+                    onPressed: () => _launchUrl(_webUrl),
+                  ),
+                  CupertinoButton.filled(
+                    child: const Text(GlobalEn.shareLink),
+                    onPressed: () => Share.share(_webUrl),
+                  ),
+                ],
+              ),
+              CupertinoButton(
+                child: const Text(GlobalEn.next),
+                onPressed: () => context.push('/connect'),
+              ),
+            ],
           ),
-          CupertinoButton.filled(
-            child: const Text(GlobalEn.shareLink),
-            onPressed: () => Share.share(_webUrl),
-          ),
-          CupertinoButton(
-            child: const Text(GlobalEn.next),
-            onPressed: () => context.push('/connect'),
-          ),
-        ],
+        ),
       ),
     );
   }

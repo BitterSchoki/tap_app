@@ -3,13 +3,14 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../provider/data_provider.dart';
+import '../../provider/provider.dart';
 import '../device_communication_receive/device_communication_receive_bloc.dart';
 
 part 'device_connection_event.dart';
 part 'device_connection_state.dart';
 
-class DeviceConnectionBloc extends Bloc<DeviceConnectionEvent, DeviceConnectionState> {
+class DeviceConnectionBloc
+    extends Bloc<DeviceConnectionEvent, DeviceConnectionState> {
   DeviceConnectionBloc({
     required this.dataProvider,
     required this.deviceCommunicationReceiveBloc,
@@ -26,24 +27,27 @@ class DeviceConnectionBloc extends Bloc<DeviceConnectionEvent, DeviceConnectionS
   final DataProvider dataProvider;
   final DeviceCommunicationReceiveBloc deviceCommunicationReceiveBloc;
 
-  Future<void> _deviceConnectionStarted(Emitter<DeviceConnectionState> emitter) async {
+  static const _resolvedBonsoirService = ResolvedBonsoirService(
+    ip: '10.163.181.31',
+    port: 12345,
+    name: 'tapApp2',
+    type: '_tapapp2._tcp',
+  );
+
+  Future<void> _deviceConnectionStarted(
+      Emitter<DeviceConnectionState> emitter) async {
     emitter(DeviceConnectionInProgress());
 
     try {
-      final model = dataProvider.startNetworkDiscovery(5000);
-      await Future.delayed(Duration(seconds: 2));
+      BonsoirDiscoveryModel model = BonsoirDiscoveryModel();
+      model.start();
+      await Future.delayed(const Duration(seconds: 2));
       final discoveredServices = model.discoveredServices;
 
       print(discoveredServices);
 
       if (discoveredServices.isEmpty) {
-        const resolvedBonsoirService = ResolvedBonsoirService(
-          ip: '10.163.181.31',
-          port: 12345,
-          name: 'tapApp2',
-          type: '_tapapp2._tcp',
-        );
-        discoveredServices.add(resolvedBonsoirService);
+        discoveredServices.add(_resolvedBonsoirService);
       }
 
       final isConnected = await dataProvider.connectToDevice(
@@ -63,7 +67,8 @@ class DeviceConnectionBloc extends Bloc<DeviceConnectionEvent, DeviceConnectionS
     }
   }
 
-  Future<void> _deviceDisconnctionStarted(Emitter<DeviceConnectionState> emitter) async {
+  Future<void> _deviceDisconnctionStarted(
+      Emitter<DeviceConnectionState> emitter) async {
     dataProvider.disconnect();
     emitter(DeviceConnectionInitial());
   }
