@@ -20,29 +20,27 @@ class ActionPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              BlocBuilder<DeviceCommunicationReceiveBloc,
-                  DeviceCommunicationReceiveState>(
-                builder: (context, state) {
-                  if (state is DeviceCommunicationMessageReceivedSuccess) {
-                    final messages = state.messages.map(
-                      (msg) => Text(msg),
-                    );
-                    return ListView(
-                      children: [
-                        ...messages,
-                      ],
-                    );
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                },
-              ),
+              // BlocBuilder<DeviceCommunicationReceiveBloc,
+              //     DeviceCommunicationReceiveState>(
+              //   builder: (context, state) {
+              //     if (state is DeviceCommunicationMessageReceivedSuccess) {
+              //       final messages = state.messages.map(
+              //         (msg) => Text(msg),
+              //       );
+              //       return ListView(
+              //         children: [
+              //           ...messages,
+              //         ],
+              //       );
+              //     } else {
+              //       return const SizedBox.shrink();
+              //     }
+              //   },
+              // ),
               ElevatedButton(
                 onPressed: () {
-                  BlocProvider.of<RecordingBloc>(context)
-                      .add(RecordingStarted());
-                  final modelLoadState =
-                      BlocProvider.of<ModelLoadBloc>(context).state;
+                  BlocProvider.of<RecordingBloc>(context).add(RecordingStarted());
+                  final modelLoadState = BlocProvider.of<ModelLoadBloc>(context).state;
                   if (modelLoadState is ModelLoadSuccess) {
                     BlocProvider.of<ClassificationBloc>(context).add(
                       ClassificationStarted(

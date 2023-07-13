@@ -18,10 +18,7 @@ class ModelLoadBloc extends Bloc<ModelLoadEvent, ModelLoadState> {
     });
   }
 
-  static const String _modelAssetPath =
-      'lib/assets/models/model_combined_g.tflite';
-
-  static const String _pythonScriptPath = 'prepos_script.py';
+  static const String _modelAssetPath = 'lib/assets/models/model_combined_g.tflite';
 
   Future<void> _modelLoadStarted(Emitter<ModelLoadState> emitter) async {
     emitter(ModelLoadInProgress());
@@ -29,13 +26,9 @@ class ModelLoadBloc extends Bloc<ModelLoadEvent, ModelLoadState> {
     try {
       final interpreter = await tfl.Interpreter.fromAsset(_modelAssetPath);
 
-      final preProcessor = PreProcessor();
-
-      await preProcessor.initialize("python", _pythonScriptPath, false);
-
       emitter(ModelLoadSuccess(
         interpreter: interpreter,
-        preProcessor: preProcessor,
+        preProcessor: PreProcessor(),
       ));
     } catch (e) {
       emitter(ModelLoadFailure());

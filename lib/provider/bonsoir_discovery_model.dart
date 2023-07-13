@@ -16,8 +16,7 @@ class BonsoirDiscoveryModel extends ChangeNotifier {
   StreamSubscription<BonsoirDiscoveryEvent>? _subscription;
 
   /// Returns all discovered (and resolved) services.
-  List<ResolvedBonsoirService> get discoveredServices =>
-      List.of(_resolvedServices);
+  List<ResolvedBonsoirService> get discoveredServices => List.of(_resolvedServices);
 
   /// Starts the Bonsoir discovery.
   Future<void> start() async {
