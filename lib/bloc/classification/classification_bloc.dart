@@ -269,7 +269,6 @@ class ClassificationBloc
     var output = List.filled(1, List.filled(1, 0));
 
     interpreter!.run(data, output);
-    interpreter!.close();
 
     print('Classified: ${output.toString()}');
 
@@ -283,5 +282,11 @@ class ClassificationBloc
     deviceCommunicationSendBloc.add(
       const DeviceCommunicationSendMessage(actionType: DeviceActionType.next),
     );
+  }
+
+  @override
+  Future<void> close() {
+    interpreter!.close();
+    return super.close();
   }
 }

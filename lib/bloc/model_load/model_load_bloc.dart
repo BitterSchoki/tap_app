@@ -17,7 +17,7 @@ class ModelLoadBloc extends Bloc<ModelLoadEvent, ModelLoadState> {
   }
 
   static const String _modelAssetPath =
-      'lib/assets/models/model_combined_g1.tflite';
+      'lib/assets/models/LSTM_G_100EPOCHS.tflite';
 
   Future<void> _modelLoadStarted(Emitter<ModelLoadState> emitter) async {
     emitter(ModelLoadInProgress());
