@@ -18,7 +18,7 @@ class OnboardingPage extends StatefulWidget {
 class _OnboardingPageState extends State<OnboardingPage> {
   final PageController _controller = PageController();
 
-  static const int pageCount = 4;
+  static const int pageCount = 5;
   bool isLastPage = false;
   @override
   Widget build(BuildContext context) {
@@ -34,6 +34,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             },
             controller: _controller,
             children: const [
+              OnboardingWelcome(),
               OnboardingCompanion(),
               OnboardingConnect(),
               OnobardingPocket(),

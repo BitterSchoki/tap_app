@@ -8,9 +8,9 @@ class OnboardingTap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const OnboardingImage(
-      assetPath: 'lib/assets/images/onboarding_companion.webp',
+      assetPath: 'lib/assets/images/onboarding_tap.webp',
       stepCount: "STEP 4",
-      title: "Tap on back to skip\n Double Tap to previous",
+      title: "Tap on back to navigate between slides",
     );
   }
 }

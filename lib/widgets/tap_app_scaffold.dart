@@ -38,6 +38,7 @@ class _TapAppAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoSliverNavigationBar(
+      leading: const Icon(null),
       trailing: GestureDetector(
         child: const Icon(
           CupertinoIcons.question_circle,
@@ -60,6 +61,7 @@ class _TapAppAppBar extends StatelessWidget {
         content: const Text('Go to download...'),
         actions: <CupertinoDialogAction>[
           CupertinoDialogAction(
+            isDefaultAction: true,
             onPressed: () {
               Navigator.pop(context);
             },

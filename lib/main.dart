@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:tap_app/bloc/bloc.dart';
 import 'package:tap_app/bloc/recording/recording_bloc.dart';
 import 'package:tap_app/pages/pages.dart';
-import 'package:tap_app/pages/shell.dart';
 import 'package:tap_app/provider/data_provider.dart';
 
 import 'utils/utils.dart';
@@ -56,8 +55,7 @@ class TapApp extends StatelessWidget {
                 builder: (BuildContext context, GoRouterState state) {
                   return MultiBlocProvider(
                     providers: [
-                      BlocProvider<DeviceConnectionBloc>(
-                          create: (context) => deviceConnectionBloc),
+                      BlocProvider<DeviceConnectionBloc>(create: (context) => deviceConnectionBloc),
                       BlocProvider<ModelLoadBloc>(
                         create: (context) => modelLoadBloc,
                       ),
@@ -69,14 +67,17 @@ class TapApp extends StatelessWidget {
                   GoRoute(
                     path: 'action',
                     builder: (BuildContext context, GoRouterState state) {
-                      final classificationBloc = ClassificationBloc();
+                      final deviceCommunicationSendBloc = DeviceCommunicationSendBloc(
+                        dataProvider: dataProvider,
+                      );
+                      final classificationBloc = ClassificationBloc(
+                        deviceCommunicationSendBloc: deviceCommunicationSendBloc,
+                      );
 
                       return MultiBlocProvider(
                         providers: [
                           BlocProvider<DeviceCommunicationSendBloc>(
-                            create: (context) => DeviceCommunicationSendBloc(
-                              dataProvider: dataProvider,
-                            ),
+                            create: (context) => deviceCommunicationSendBloc,
                           ),
                           BlocProvider<DeviceCommunicationReceiveBloc>(
                             create: (context) => deviceCommunicationReceiveBloc,

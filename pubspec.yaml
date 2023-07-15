@@ -6,7 +6,7 @@ publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.0.4"
+  sdk: ">=3.1.0-213.0.dev <4.0.0"
 
 dependencies:
   flutter:
@@ -17,11 +17,9 @@ dependencies:
   flutter_bloc: ^8.0.0
   equatable: ^2.0.5
   sensors_plus: ^3.0.2
-  tcp_socket_connection: ^0.3.1
   tflite_flutter: ^0.10.1
   url_launcher: ^6.1.11
   share_plus: ^7.0.2
-  permission_handler: ^10.4.1
   shared_preferences: ^2.2.0
   smooth_page_indicator: ^1.1.0
   slide_to_act: ^2.0.1
@@ -40,4 +38,7 @@ flutter:
     - lib/assets/images/tap_app_logo.webp
     - lib/assets/images/onboarding_companion.webp
     - lib/assets/images/onboarding_connect.webp
+    - lib/assets/images/onboarding_welcome.webp
+    - lib/assets/images/onboarding_pocket.webp
+    - lib/assets/images/onboarding_tap.webp
     - lib/assets/models/model_combined_g.tflite

@@ -20,23 +20,22 @@ class ActionPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // BlocBuilder<DeviceCommunicationReceiveBloc,
-              //     DeviceCommunicationReceiveState>(
-              //   builder: (context, state) {
-              //     if (state is DeviceCommunicationMessageReceivedSuccess) {
-              //       final messages = state.messages.map(
-              //         (msg) => Text(msg),
-              //       );
-              //       return ListView(
-              //         children: [
-              //           ...messages,
-              //         ],
-              //       );
-              //     } else {
-              //       return const SizedBox.shrink();
-              //     }
-              //   },
-              // ),
+              Expanded(
+                child: BlocBuilder<DeviceCommunicationReceiveBloc, DeviceCommunicationReceiveState>(
+                  builder: (context, state) {
+                    if (state is DeviceCommunicationMessageReceivedSuccess) {
+                      return ListView.builder(
+                          padding: const EdgeInsets.all(8),
+                          itemCount: state.messages.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Text(state.messages[index]);
+                          });
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                ),
+              ),
               ElevatedButton(
                 onPressed: () {
                   BlocProvider.of<RecordingBloc>(context).add(RecordingStarted());

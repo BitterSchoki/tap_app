@@ -1,14 +1,18 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tap_app/utils/utils.dart';
 import 'package:tflite_flutter/tflite_flutter.dart' as tfl;
 
 import '../../utils/helpers/helpers.dart';
+import '../device_communication_send/device_communication_send_bloc.dart';
 
 part 'classification_event.dart';
 part 'classification_state.dart';
 
 class ClassificationBloc extends Bloc<ClassificationEvent, ClassificationState> {
-  ClassificationBloc() : super(ClassificationInitial()) {
+  ClassificationBloc({
+    required this.deviceCommunicationSendBloc,
+  }) : super(ClassificationInitial()) {
     on<ClassificationEvent>((event, emit) {
       if (event is RecordedAccelerometer) {
         _recordedAccelerometer(event);
@@ -19,6 +23,7 @@ class ClassificationBloc extends Bloc<ClassificationEvent, ClassificationState> 
       }
     });
   }
+  final DeviceCommunicationSendBloc deviceCommunicationSendBloc;
 
   tfl.Interpreter? interpreter;
 
@@ -69,5 +74,13 @@ class ClassificationBloc extends Bloc<ClassificationEvent, ClassificationState> 
     interpreter!.close();
 
     print('Classified: ${output.toString()}');
+
+    _sendMessage();
+  }
+
+  void _sendMessage() {
+    deviceCommunicationSendBloc.add(
+      const DeviceCommunicationSendMessage(actionType: DeviceActionType.next),
+    );
   }
 }
