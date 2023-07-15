@@ -7,7 +7,8 @@ class DataFrame {
   DataFrame(this.columns, this.data);
 
   DataFrame copy() {
-    final copiedData = List<List<double>>.from(data.map((row) => List<double>.from(row)));
+    final copiedData =
+        List<List<double>>.from(data.map((row) => List<double>.from(row)));
     return DataFrame(columns, copiedData);
   }
 
@@ -49,8 +50,8 @@ class DataFrame {
   }
 
   DataFrame selectColumns(List<String> selectedColumns) {
-    final selectedData =
-        List<List<double>>.generate(data.length, (_) => List<double>.filled(selectedColumns.length, 0));
+    final selectedData = List<List<double>>.generate(
+        data.length, (_) => List<double>.filled(selectedColumns.length, 0));
 
     for (int i = 0; i < data.length; i++) {
       for (int j = 0; j < selectedColumns.length; j++) {
@@ -64,8 +65,11 @@ class DataFrame {
 
   @override
   String toString() {
-    final rows = data.map((row) => row.map((value) => value.toStringAsFixed(6)).toList()).toList();
-    final maxLengths = List<int>.from(columns.map((column) => max(column.length, 6)));
+    final rows = data
+        .map((row) => row.map((value) => value.toStringAsFixed(6)).toList())
+        .toList();
+    final maxLengths =
+        List<int>.from(columns.map((column) => max(column.length, 6)));
     for (final row in rows) {
       for (int i = 0; i < row.length; i++) {
         maxLengths[i] = max(maxLengths[i], row[i].length);

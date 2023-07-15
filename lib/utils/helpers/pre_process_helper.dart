@@ -23,7 +23,9 @@ class PreProcessHelper {
     return List.generate(
       accelerometerData.length,
       (index) => List<double>.from(
-        Tuple2(accelerometerData[index], gyroscopeData[index]).toList().expand((x) => x),
+        Tuple2(accelerometerData[index], gyroscopeData[index])
+            .toList()
+            .expand((x) => x),
       ),
     );
   }
@@ -63,10 +65,14 @@ class PreProcessHelper {
     final normalizedAccelerometer = accelerometerData.copy();
     for (final column in accelerometerColumns) {
       final columnData = accelerometerData.getColumn(column);
-      final mean = columnData.reduce((a, b) => a + b) / columnData.length.toDouble();
-      final stdDev =
-          sqrt(columnData.map((value) => pow(value - mean, 2)).reduce((a, b) => a + b) / columnData.length.toDouble());
-      final normalizedColumnData = columnData.map((value) => (value - mean) / stdDev).toList();
+      final mean =
+          columnData.reduce((a, b) => a + b) / columnData.length.toDouble();
+      final stdDev = sqrt(columnData
+              .map((value) => pow(value - mean, 2))
+              .reduce((a, b) => a + b) /
+          columnData.length.toDouble());
+      final normalizedColumnData =
+          columnData.map((value) => (value - mean) / stdDev).toList();
       normalizedAccelerometer.setColumn(column, normalizedColumnData);
     }
 
@@ -74,16 +80,23 @@ class PreProcessHelper {
     final normalizedGyroscope = gyroscopeData.copy();
     for (final column in gyroscopeColumns) {
       final columnData = gyroscopeData.getColumn(column);
-      final mean = columnData.reduce((a, b) => a + b) / columnData.length.toDouble();
-      final stdDev =
-          sqrt(columnData.map((value) => pow(value - mean, 2)).reduce((a, b) => a + b) / columnData.length.toDouble());
-      final normalizedColumnData = columnData.map((value) => (value - mean) / stdDev).toList();
+      final mean =
+          columnData.reduce((a, b) => a + b) / columnData.length.toDouble();
+      final stdDev = sqrt(columnData
+              .map((value) => pow(value - mean, 2))
+              .reduce((a, b) => a + b) /
+          columnData.length.toDouble());
+      final normalizedColumnData =
+          columnData.map((value) => (value - mean) / stdDev).toList();
       normalizedGyroscope.setColumn(column, normalizedColumnData);
     }
 
-    final normalizedAccelerometerResetIndex = normalizedAccelerometer.resetIndex(drop: true);
-    final normalizedGyroscopeResetIndex = normalizedGyroscope.resetIndex(drop: true);
+    final normalizedAccelerometerResetIndex =
+        normalizedAccelerometer.resetIndex(drop: true);
+    final normalizedGyroscopeResetIndex =
+        normalizedGyroscope.resetIndex(drop: true);
 
-    return mergeData(normalizedAccelerometerResetIndex.data, normalizedGyroscopeResetIndex.data);
+    return mergeData(normalizedAccelerometerResetIndex.data,
+        normalizedGyroscopeResetIndex.data);
   }
 }

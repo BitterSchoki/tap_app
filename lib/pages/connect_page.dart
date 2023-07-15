@@ -25,7 +25,7 @@ class ConnectPage extends StatelessWidget {
                 child:
                     BlocConsumer<DeviceConnectionBloc, DeviceConnectionState>(
                   listener: (context, state) {
-                    if (state is DeviceConnectionSuccess) {
+                    if (state is DeviceConnectionFailure) {
                       context.push('/connect/action');
                     } else if (state is DeviceConnectionFailure) {
                       _showAlertDialog(context);

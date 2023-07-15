@@ -47,9 +47,6 @@ class RecordingBloc extends Bloc<RecordingEvent, RecordingState> {
         (spl.AccelerometerEvent event) {
           final tempAcceloremterData = [event.x, event.y, event.z];
           accelerometerData[ia] = tempAcceloremterData;
-          // accelerometerData[ia][0] = event.x;
-          // accelerometerData[ia][1] = event.y;
-          // accelerometerData[ia][2] = event.z;
           ia++;
 
           if (ia > 10) {
@@ -73,9 +70,6 @@ class RecordingBloc extends Bloc<RecordingEvent, RecordingState> {
       spl.gyroscopeEvents.listen(
         (spl.GyroscopeEvent event) {
           final tempGyroscopeData = [event.x, event.y, event.z];
-          // gyroscopeData[ig][0] = event.x;
-          // gyroscopeData[ig][1] = event.y;
-          // gyroscopeData[ig][2] = event.z;
           gyroscopeData[ig] = tempGyroscopeData;
           ig++;
 

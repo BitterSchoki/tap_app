@@ -42,3 +42,4 @@ flutter:
     - lib/assets/images/onboarding_pocket.webp
     - lib/assets/images/onboarding_tap.webp
     - lib/assets/models/model_combined_g.tflite
+    - lib/assets/models/model_combined_g1.tflite

@@ -16,7 +16,8 @@ class ModelLoadBloc extends Bloc<ModelLoadEvent, ModelLoadState> {
     });
   }
 
-  static const String _modelAssetPath = 'lib/assets/models/model_combined_g.tflite';
+  static const String _modelAssetPath =
+      'lib/assets/models/model_combined_g1.tflite';
 
   Future<void> _modelLoadStarted(Emitter<ModelLoadState> emitter) async {
     emitter(ModelLoadInProgress());
