@@ -97,14 +97,6 @@ packages:
       url: "https://mobile20unpubfrontdoor.azurefd.net"
     source: hosted
     version: "3.0.3"
-  csv:
-    dependency: transitive
-    description:
-      name: csv
-      sha256: "016b31a51a913744a0a1655c74ff13c9379e1200e246a03d96c81c5d9ed297b5"
-      url: "https://mobile20unpubfrontdoor.azurefd.net"
-    source: hosted
-    version: "5.0.2"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -176,14 +168,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flython:
-    dependency: "direct main"
-    description:
-      name: flython
-      sha256: c315d960efe337e2dbc9bf4dffb9571ebcf8c3c281a5a8624a569aa8bc545bd8
-      url: "https://mobile20unpubfrontdoor.azurefd.net"
-    source: hosted
-    version: "0.2.0"
   go_router:
     dependency: "direct main"
     description:
@@ -192,14 +176,6 @@ packages:
       url: "https://mobile20unpubfrontdoor.azurefd.net"
     source: hosted
     version: "8.2.0"
-  injector:
-    dependency: transitive
-    description:
-      name: injector
-      sha256: "2a683124c716e93b45521794f55bfe770e069cb3d871fc4fbc65b5acef78e832"
-      url: "https://mobile20unpubfrontdoor.azurefd.net"
-    source: hosted
-    version: "2.0.0"
   js:
     dependency: transitive
     description:
@@ -208,14 +184,6 @@ packages:
       url: "https://mobile20unpubfrontdoor.azurefd.net"
     source: hosted
     version: "0.6.7"
-  json_annotation:
-    dependency: transitive
-    description:
-      name: json_annotation
-      sha256: b10a7b2ff83d83c777edba3c6a0f97045ddadd56c944e1a23a3fdf43a1bf4467
-      url: "https://mobile20unpubfrontdoor.azurefd.net"
-    source: hosted
-    version: "4.8.1"
   lints:
     dependency: transitive
     description:
@@ -264,46 +232,6 @@ packages:
       url: "https://mobile20unpubfrontdoor.azurefd.net"
     source: hosted
     version: "1.0.4"
-  ml_algo:
-    dependency: "direct main"
-    description:
-      name: ml_algo
-      sha256: "9fff33cf997efeb0e3700a011a60cd289635883c4017e86fecf22a1138e06bc2"
-      url: "https://mobile20unpubfrontdoor.azurefd.net"
-    source: hosted
-    version: "16.17.7"
-  ml_dataframe:
-    dependency: "direct main"
-    description:
-      name: ml_dataframe
-      sha256: "75434865e7ff85edcf8b006cb7c580e65a7863bb853010f41e12597b69d55db7"
-      url: "https://mobile20unpubfrontdoor.azurefd.net"
-    source: hosted
-    version: "1.6.0"
-  ml_linalg:
-    dependency: transitive
-    description:
-      name: ml_linalg
-      sha256: "36b658c6619c4e1b47f8e2edd100308fd75a5b71d1e6359d8be0cbe06214b441"
-      url: "https://mobile20unpubfrontdoor.azurefd.net"
-    source: hosted
-    version: "13.11.31"
-  ml_preprocessing:
-    dependency: "direct main"
-    description:
-      name: ml_preprocessing
-      sha256: fdc7bdf65e53bf377db2ac6ad017d88f08d81827e1c6062b9348893c0bab9f26
-      url: "https://mobile20unpubfrontdoor.azurefd.net"
-    source: hosted
-    version: "7.0.2"
-  mutex:
-    dependency: transitive
-    description:
-      name: mutex
-      sha256: "03116a4e46282a671b46c12de649d72c0ed18188ffe12a8d0fc63e83f4ad88f4"
-      url: "https://mobile20unpubfrontdoor.azurefd.net"
-    source: hosted
-    version: "3.0.1"
   nested:
     dependency: transitive
     description:
@@ -433,7 +361,7 @@ packages:
     source: hosted
     version: "4.2.4"
   provider:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: provider
       sha256: cdbe7530b12ecd9eb455bdaa2fcb8d4dad22e80b8afb4798b41479d5ce26847f
@@ -733,14 +661,6 @@ packages:
       url: "https://mobile20unpubfrontdoor.azurefd.net"
     source: hosted
     version: "1.0.0"
-  xrange:
-    dependency: transitive
-    description:
-      name: xrange
-      sha256: "17bb75bd5eeae7152680f9b748880bf88a670b61f360266df56f7bd239cb6343"
-      url: "https://mobile20unpubfrontdoor.azurefd.net"
-    source: hosted
-    version: "2.0.0"
 sdks:
   dart: ">=3.0.4 <4.0.0"
   flutter: ">=3.10.0"

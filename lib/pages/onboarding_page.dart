@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:tap_app/utils/utils.dart';
-import '../utils/global/global_en.dart';
+
+import '../utils/utils.dart';
 import 'onboarding/onboarding_pages.dart';
 
 class OnboardingPage extends StatefulWidget {

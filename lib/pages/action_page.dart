@@ -45,7 +45,6 @@ class ActionPage extends StatelessWidget {
                     BlocProvider.of<ClassificationBloc>(context).add(
                       ClassificationStarted(
                         interpreter: modelLoadState.interpreter,
-                        preProcessor: modelLoadState.preProcessor,
                       ),
                     );
                   }

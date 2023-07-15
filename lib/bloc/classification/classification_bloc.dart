@@ -2,13 +2,12 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tflite_flutter/tflite_flutter.dart' as tfl;
 
-import '../../utils/python/python.dart';
+import '../../utils/helpers/helpers.dart';
 
 part 'classification_event.dart';
 part 'classification_state.dart';
 
-class ClassificationBloc
-    extends Bloc<ClassificationEvent, ClassificationState> {
+class ClassificationBloc extends Bloc<ClassificationEvent, ClassificationState> {
   ClassificationBloc() : super(ClassificationInitial()) {
     on<ClassificationEvent>((event, emit) {
       if (event is RecordedAccelerometer) {
@@ -22,7 +21,6 @@ class ClassificationBloc
   }
 
   tfl.Interpreter? interpreter;
-  PreProcessor? preProcessor;
 
   bool hasAccelerometerInput = false;
   bool hasGyroscopeInput = false;
@@ -50,29 +48,24 @@ class ClassificationBloc
     }
   }
 
-  void _classificationStarted(
-      Emitter<ClassificationState> emit, ClassificationStarted event) async {
+  void _classificationStarted(Emitter<ClassificationState> emit, ClassificationStarted event) async {
     emit(ClassificationInterpreterSet());
     interpreter = event.interpreter;
-    preProcessor = event.preProcessor;
   }
 
   void _startClassification() async {
     if (state is! ClassificationInterpreterSet) {
       return;
     }
-    var prePorcessedData;
 
-    await preProcessor!.preprocessData(
+    final prePorcessedData = PreProcessHelper.preProcessData(
       accelerometerData: _accelerometerData,
       gyroscopeData: _gyroscopeData,
-      ouput: prePorcessedData,
     );
 
-    final inputData = prePorcessedData;
     var output;
 
-    interpreter!.run(inputData, output);
+    interpreter!.run(prePorcessedData, output);
     interpreter!.close();
 
     print('Classified: ${output.toString()}');

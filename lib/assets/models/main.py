@@ -5,7 +5,6 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
 
-CMD_SMOOTH_NORMALIZE = 0
 WINDOW_SIZE = 5
 
 def smooth_data(array):

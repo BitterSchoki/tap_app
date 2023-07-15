@@ -9,8 +9,7 @@ import '../device_communication_receive/device_communication_receive_bloc.dart';
 part 'device_connection_event.dart';
 part 'device_connection_state.dart';
 
-class DeviceConnectionBloc
-    extends Bloc<DeviceConnectionEvent, DeviceConnectionState> {
+class DeviceConnectionBloc extends Bloc<DeviceConnectionEvent, DeviceConnectionState> {
   DeviceConnectionBloc({
     required this.dataProvider,
     required this.deviceCommunicationReceiveBloc,
@@ -34,14 +33,13 @@ class DeviceConnectionBloc
     type: '_tapapp2._tcp',
   );
 
-  Future<void> _deviceConnectionStarted(
-      Emitter<DeviceConnectionState> emitter) async {
+  Future<void> _deviceConnectionStarted(Emitter<DeviceConnectionState> emitter) async {
     emitter(DeviceConnectionInProgress());
 
     try {
       BonsoirDiscoveryModel model = BonsoirDiscoveryModel();
       model.start();
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 1));
       final discoveredServices = model.discoveredServices;
 
       print(discoveredServices);
@@ -52,7 +50,7 @@ class DeviceConnectionBloc
 
       final isConnected = await dataProvider.connectToDevice(
         serviceInfo: discoveredServices.first,
-        timeout: const Duration(milliseconds: 10000),
+        timeout: const Duration(milliseconds: 5000),
         messageReceivedCallback: _onMessageReceived,
         disconnectCallback: _onDisconnected,
       );
@@ -67,8 +65,7 @@ class DeviceConnectionBloc
     }
   }
 
-  Future<void> _deviceDisconnctionStarted(
-      Emitter<DeviceConnectionState> emitter) async {
+  Future<void> _deviceDisconnctionStarted(Emitter<DeviceConnectionState> emitter) async {
     dataProvider.disconnect();
     emitter(DeviceConnectionInitial());
   }
