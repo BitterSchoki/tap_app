@@ -5,7 +5,6 @@ import 'package:tflite_flutter/tflite_flutter.dart' as tfl;
 
 import '../../utils/helpers/helpers.dart';
 import '../device_communication_send/device_communication_send_bloc.dart';
-
 part 'classification_event.dart';
 part 'classification_state.dart';
 
@@ -266,11 +265,11 @@ class ClassificationBloc
       ]
     ];
 
-    var output = List.filled(1, List.filled(1, 0));
+    var output = List.filled(1, List.filled(1, 0.0));
 
     interpreter!.run(data, output);
 
-    print('Classified: ${output.toString()}');
+    print('Classified: ${output.first.first}');
 
     //depending on the output, call _sendMessage
     if (true) {
