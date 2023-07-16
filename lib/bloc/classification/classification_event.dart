@@ -9,12 +9,14 @@ abstract class ClassificationEvent extends Equatable {
 
 class ClassificationStarted extends ClassificationEvent {
   final tfl.Interpreter interpreter;
+  final TabType tabType;
   const ClassificationStarted({
     required this.interpreter,
+    required this.tabType,
   });
 
   @override
-  List<Object> get props => [interpreter];
+  List<Object> get props => [interpreter, tabType];
 }
 
 class RecordedAccelerometer extends ClassificationEvent {
