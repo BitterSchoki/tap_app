@@ -19,67 +19,97 @@ class ActionPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 25.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: BlocBuilder<DeviceCommunicationReceiveBloc, DeviceCommunicationReceiveState>(
-                  builder: (context, state) {
-                    if (state is DeviceCommunicationMessageReceivedSuccess) {
-                      return ListView.builder(
-                          padding: const EdgeInsets.all(8),
-                          itemCount: state.messages.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Text(state.messages[index]);
-                          });
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                ),
-              ),
-              CupertinoButton(
-                child: const Text('Table'),
-                onPressed: () {
-                  _selectTabType(
-                    context,
-                    tabType: TabType.table,
-                  );
-                },
-              ),
-              CupertinoButton(
-                child: const Text('Pocket'),
-                onPressed: () {
-                  _selectTabType(
-                    context,
-                    tabType: TabType.pocket,
-                  );
-                },
-              ),
-              CupertinoButton(
-                child: const Text('Hand'),
-                onPressed: () {
-                  _selectTabType(
-                    context,
-                    tabType: TabType.hand,
-                  );
-                },
+              Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 16.0),
+                    child: Text(
+                      "History:",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 24,
+                      ),
+                    ),
+                  ),
+                  BlocBuilder<DeviceCommunicationReceiveBloc,
+                      DeviceCommunicationReceiveState>(
+                    builder: (context, state) {
+                      if (state is DeviceCommunicationMessageReceivedSuccess) {
+                        return ListView.builder(
+                            padding: const EdgeInsets.all(8),
+                            itemCount: state.messages.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Text(state.messages[index]);
+                            });
+                      } else {
+                        return const Text("no taps yet");
+                      }
+                    },
+                  ),
+                ],
               ),
               Padding(
-                padding: const EdgeInsets.all(50.0),
+                padding: const EdgeInsets.symmetric(vertical: 32.0),
+                child: Column(
+                  children: [
+                    CupertinoButton(
+                      child: const Text('Table'),
+                      onPressed: () {
+                        _selectTabType(
+                          context,
+                          tabType: TabType.table,
+                        );
+                      },
+                    ),
+                    CupertinoButton(
+                      child: const Text('Pocket'),
+                      onPressed: () {
+                        _selectTabType(
+                          context,
+                          tabType: TabType.pocket,
+                        );
+                      },
+                    ),
+                    CupertinoButton(
+                      child: const Text('Hand'),
+                      onPressed: () {
+                        _selectTabType(
+                          context,
+                          tabType: TabType.hand,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 75.0,
+                ),
                 child: SlideAction(
                   text: "Disconnect",
-                  elevation: 0,
-                  innerColor: CustomColors.darkPurple,
-                  outerColor: Colors.white,
+                  height: 48,
+                  borderRadius: 10,
+                  sliderButtonIconPadding: 6,
+                  innerColor: Colors.white,
+                  outerColor: CustomColors.darkPurple,
                   sliderButtonIcon: const Icon(
                     Icons.cancel,
-                    color: Colors.white,
+                    color: CustomColors.darkPurple,
                   ),
                   onSubmit: () async {
                     BlocProvider.of<RecordingBloc>(context).add(
                       RecordingStopped(),
                     );
-                    context.push('/connect');
+                    BlocProvider.of<ClassificationBloc>(context).add(
+                      ClassificationStopped(),
+                    );
+                    await Future.delayed(const Duration(milliseconds: 500), () {
+                      context.push('/connect');
+                    });
                   },
                 ),
               ),

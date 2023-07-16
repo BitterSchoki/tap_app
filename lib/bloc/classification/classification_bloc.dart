@@ -9,7 +9,8 @@ import '../device_communication_send/device_communication_send_bloc.dart';
 part 'classification_event.dart';
 part 'classification_state.dart';
 
-class ClassificationBloc extends Bloc<ClassificationEvent, ClassificationState> {
+class ClassificationBloc
+    extends Bloc<ClassificationEvent, ClassificationState> {
   ClassificationBloc({
     required this.deviceCommunicationSendBloc,
   }) : super(ClassificationInitial()) {
@@ -20,6 +21,8 @@ class ClassificationBloc extends Bloc<ClassificationEvent, ClassificationState> 
         _recordedGyroscope(event);
       } else if (event is ClassificationStarted) {
         _classificationStarted(emit, event);
+      } else if (event is ClassificationStopped) {
+        interpreter!.close();
       }
     });
   }
@@ -58,14 +61,16 @@ class ClassificationBloc extends Bloc<ClassificationEvent, ClassificationState> 
     }
   }
 
-  void _classificationStarted(Emitter<ClassificationState> emit, ClassificationStarted event) async {
+  void _classificationStarted(
+      Emitter<ClassificationState> emit, ClassificationStarted event) async {
     emit(ClassificationInterpreterSet());
-    interpreter = event.interpreter;
+    interpreter ??= event.interpreter;
 
     switch (event.tabType) {
       case TabType.table:
       case TabType.pocket:
       case TabType.hand:
+        //set specific mean, stD for selected type
         break;
       default:
     }
@@ -90,7 +95,7 @@ class ClassificationBloc extends Bloc<ClassificationEvent, ClassificationState> 
     print('Classified: ${output.first.first}');
 
     //depending on the output, call _sendMessage
-    if (true) {
+    if (output.first.first > 0.8) {
       _sendMessage();
     }
   }

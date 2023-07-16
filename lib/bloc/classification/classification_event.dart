@@ -34,3 +34,5 @@ class RecordedGyroscope extends ClassificationEvent {
   @override
   List<Object> get props => [values];
 }
+
+class ClassificationStopped extends ClassificationEvent {}
