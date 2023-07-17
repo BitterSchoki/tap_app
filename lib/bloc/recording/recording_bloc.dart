@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:proximity_sensor/proximity_sensor.dart';
 import 'package:sensors_plus/sensors_plus.dart' as spl;
 
 import '../classification/classification_bloc.dart';
@@ -31,6 +32,7 @@ class RecordingBloc extends Bloc<RecordingEvent, RecordingState> {
 
   final ClassificationBloc classificationBloc;
   final _streamSubscriptions = <StreamSubscription<dynamic>>[];
+  bool _isNear = false;
 
   void _recordingStarted(Emitter<RecordingState> emitter) {
     emitter(RecordingInProgress());
@@ -39,8 +41,7 @@ class RecordingBloc extends Bloc<RecordingEvent, RecordingState> {
 
   void _initSensorStreamSubscriptions(Emitter<RecordingState> emitter) {
     int ia = 0;
-    final List<List<double>> accelerometerData =
-        List.filled(11, List.filled(3, 0));
+    final List<List<double>> accelerometerData = List.filled(11, List.filled(3, 0));
 
     _streamSubscriptions.add(
       spl.accelerometerEvents.listen(
@@ -51,9 +52,11 @@ class RecordingBloc extends Bloc<RecordingEvent, RecordingState> {
 
           if (ia > 10) {
             ia = 0;
-            classificationBloc.add(
-              RecordedAccelerometer(values: accelerometerData),
-            );
+            if (_isNear) {
+              classificationBloc.add(
+                RecordedAccelerometer(values: accelerometerData),
+              );
+            }
           }
         },
         onError: (e) {
@@ -75,15 +78,25 @@ class RecordingBloc extends Bloc<RecordingEvent, RecordingState> {
 
           if (ig > 10) {
             ig = 0;
-            classificationBloc.add(
-              RecordedGyroscope(values: gyroscopeData),
-            );
+            if (_isNear) {
+              classificationBloc.add(
+                RecordedGyroscope(values: gyroscopeData),
+              );
+            }
           }
         },
         onError: (e) {
           emitter(RecordingFailure());
         },
         cancelOnError: true,
+      ),
+    );
+
+    _streamSubscriptions.add(
+      ProximitySensor.events.listen(
+        (int event) {
+          _isNear = (event > 0) ? true : false;
+        },
       ),
     );
   }

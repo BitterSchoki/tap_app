@@ -25,6 +25,7 @@ dependencies:
   slide_to_act: ^2.0.1
   bonsoir: ^2.2.0+1
   tuple: ^2.0.2
+  proximity_sensor: ^1.0.4
 
 dev_dependencies:
   flutter_test:

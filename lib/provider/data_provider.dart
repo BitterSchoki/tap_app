@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:bonsoir/bonsoir.dart';
-import 'package:tap_app/utils/utils.dart';
 
 import 'data_provider_error.dart';
 
@@ -62,9 +61,9 @@ class DataProvider {
     }
   }
 
-  void sendMessage(DeviceActionType actionType) async {
+  void sendMessage(String message) async {
     if (socket != null) {
-      socket!.write(actionType);
+      socket!.write(message);
     }
   }
 }

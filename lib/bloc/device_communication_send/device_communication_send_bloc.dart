@@ -2,8 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tap_app/provider/data_provider.dart';
 
-import '../../../utils/utils.dart';
-
 part 'device_communication_send_event.dart';
 part 'device_communication_send_state.dart';
 
@@ -18,16 +16,16 @@ class DeviceCommunicationSendBloc extends Bloc<DeviceCommunicationSendEvent, Dev
 
   Future<void> _deviceCommunicationSendMessage(
       DeviceCommunicationSendMessage event, Emitter<DeviceCommunicationSendState> emitter) async {
-    final actionType = event.actionType;
+    final message = event.message;
 
-    emitter(DeviceCommunicationSendInProgress(actionType: actionType));
+    emitter(DeviceCommunicationSendInProgress(message: message));
 
     try {
-      dataProvider.sendMessage(actionType);
+      dataProvider.sendMessage(message);
 
-      emitter(DeviceCommunicationSendMessageSuccess(actionType: actionType));
+      emitter(DeviceCommunicationSendMessageSuccess(message: message));
     } catch (error) {
-      emitter(DeviceCommunicationSendMessageFailure(actionType: actionType));
+      emitter(DeviceCommunicationSendMessageFailure(message: message));
     }
   }
 }

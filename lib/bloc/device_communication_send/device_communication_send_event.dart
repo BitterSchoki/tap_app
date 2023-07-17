@@ -8,10 +8,10 @@ abstract class DeviceCommunicationSendEvent extends Equatable {
 }
 
 class DeviceCommunicationSendMessage extends DeviceCommunicationSendEvent {
-  const DeviceCommunicationSendMessage({required this.actionType});
+  const DeviceCommunicationSendMessage({required this.message});
 
-  final DeviceActionType actionType;
+  final String message;
 
   @override
-  List<Object> get props => [actionType];
+  List<Object> get props => [message];
 }

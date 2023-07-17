@@ -10,28 +10,28 @@ abstract class DeviceCommunicationSendState extends Equatable {
 class DeviceCommunicationSendInitial extends DeviceCommunicationSendState {}
 
 class DeviceCommunicationSendInProgress extends DeviceCommunicationSendState {
-  const DeviceCommunicationSendInProgress({required this.actionType});
+  const DeviceCommunicationSendInProgress({required this.message});
 
-  final DeviceActionType actionType;
+  final String message;
 
   @override
-  List<Object> get props => [actionType];
+  List<Object> get props => [message];
 }
 
 class DeviceCommunicationSendMessageSuccess extends DeviceCommunicationSendState {
-  const DeviceCommunicationSendMessageSuccess({required this.actionType});
+  const DeviceCommunicationSendMessageSuccess({required this.message});
 
-  final DeviceActionType actionType;
+  final String message;
 
   @override
-  List<Object> get props => [actionType];
+  List<Object> get props => [message];
 }
 
 class DeviceCommunicationSendMessageFailure extends DeviceCommunicationSendState {
-  const DeviceCommunicationSendMessageFailure({required this.actionType});
+  const DeviceCommunicationSendMessageFailure({required this.message});
 
-  final DeviceActionType actionType;
+  final String message;
 
   @override
-  List<Object> get props => [actionType];
+  List<Object> get props => [message];
 }

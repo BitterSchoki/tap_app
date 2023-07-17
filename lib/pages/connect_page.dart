@@ -22,10 +22,9 @@ class ConnectPage extends StatelessWidget {
               const SizedBox(),
               Image.asset('lib/assets/images/tap_app_logo.webp'),
               SafeArea(
-                child:
-                    BlocConsumer<DeviceConnectionBloc, DeviceConnectionState>(
+                child: BlocConsumer<DeviceConnectionBloc, DeviceConnectionState>(
                   listener: (context, state) {
-                    if (state is DeviceConnectionFailure) {
+                    if (state is DeviceConnectionSuccess) {
                       context.push('/connect/action');
                     } else if (state is DeviceConnectionFailure) {
                       _showAlertDialog(context);

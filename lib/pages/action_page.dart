@@ -34,21 +34,7 @@ class ActionPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  BlocBuilder<DeviceCommunicationReceiveBloc,
-                      DeviceCommunicationReceiveState>(
-                    builder: (context, state) {
-                      if (state is DeviceCommunicationMessageReceivedSuccess) {
-                        return ListView.builder(
-                            padding: const EdgeInsets.all(8),
-                            itemCount: state.messages.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Text(state.messages[index]);
-                            });
-                      } else {
-                        return const Text("no taps yet");
-                      }
-                    },
-                  ),
+                  //
                 ],
               ),
               Padding(
@@ -58,27 +44,27 @@ class ActionPage extends StatelessWidget {
                     CupertinoButton(
                       child: const Text('Table'),
                       onPressed: () {
-                        _selectTabType(
+                        _selectTapType(
                           context,
-                          tabType: TabType.table,
+                          tapType: TapType.table,
                         );
                       },
                     ),
                     CupertinoButton(
                       child: const Text('Pocket'),
                       onPressed: () {
-                        _selectTabType(
+                        _selectTapType(
                           context,
-                          tabType: TabType.pocket,
+                          tapType: TapType.pocket,
                         );
                       },
                     ),
                     CupertinoButton(
                       child: const Text('Hand'),
                       onPressed: () {
-                        _selectTabType(
+                        _selectTapType(
                           context,
-                          tabType: TabType.hand,
+                          tapType: TapType.hand,
                         );
                       },
                     ),
@@ -91,6 +77,11 @@ class ActionPage extends StatelessWidget {
                 ),
                 child: SlideAction(
                   text: "Disconnect",
+                  textStyle: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                  ),
                   height: 48,
                   borderRadius: 10,
                   sliderButtonIconPadding: 6,
@@ -120,9 +111,9 @@ class ActionPage extends StatelessWidget {
     );
   }
 
-  void _selectTabType(
+  void _selectTapType(
     BuildContext context, {
-    required TabType tabType,
+    required TapType tapType,
   }) {
     BlocProvider.of<RecordingBloc>(context).add(RecordingStarted());
     final modelLoadState = BlocProvider.of<ModelLoadBloc>(context).state;
@@ -130,7 +121,7 @@ class ActionPage extends StatelessWidget {
       BlocProvider.of<ClassificationBloc>(context).add(
         ClassificationStarted(
           interpreter: modelLoadState.interpreter,
-          tabType: tabType,
+          tapType: tapType,
         ),
       );
     }

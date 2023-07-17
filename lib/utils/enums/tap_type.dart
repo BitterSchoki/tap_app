@@ -1,4 +1,4 @@
-enum TabType {
+enum TapType {
   table,
   pocket,
   hand,
