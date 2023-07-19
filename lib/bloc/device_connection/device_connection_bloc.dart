@@ -27,7 +27,7 @@ class DeviceConnectionBloc extends Bloc<DeviceConnectionEvent, DeviceConnectionS
   final DeviceCommunicationReceiveBloc deviceCommunicationReceiveBloc;
 
   static const _resolvedBonsoirService = ResolvedBonsoirService(
-    ip: '192.168.2.43',
+    ip: '172.20.10.2',
     port: 12345,
     name: 'tapApp2',
     type: '_tapapp._tcp',

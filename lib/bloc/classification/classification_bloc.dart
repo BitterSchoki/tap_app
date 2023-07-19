@@ -36,6 +36,7 @@ class ClassificationBloc extends Bloc<ClassificationEvent, ClassificationState> 
   bool hasAccelerometerInput = false;
   bool hasGyroscopeInput = false;
   bool hasClassifiedTap = false;
+  bool isDoubleTap = false;
 
   List<List<double>> _accelerometerData = List.filled(11, List.filled(3, 1));
   List<List<double>> _gyroscopeData = List.filled(11, List.filled(3, 1));
@@ -89,7 +90,6 @@ class ClassificationBloc extends Bloc<ClassificationEvent, ClassificationState> 
 
     print('Classified: ${output.first.first}');
 
-    //depending on the output, call _sendMessage
     if (output.first.first > 0.8 && !hasClassifiedTap) {
       _sendMessage();
       print("TAB");

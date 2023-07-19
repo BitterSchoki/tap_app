@@ -58,7 +58,7 @@ class _TapAppAppBar extends StatelessWidget {
       context: context,
       builder: (BuildContext context) => CupertinoAlertDialog(
         title: const Text('Need help?'),
-        content: const Text('Go to download...'),
+        content: const Text('Go to tap-app.webflow.io and download the companion app to start the connetion.'),
         actions: <CupertinoDialogAction>[
           CupertinoDialogAction(
             isDefaultAction: true,
