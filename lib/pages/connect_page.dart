@@ -1,13 +1,19 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tap_app/utils/utils.dart';
 
 import '../bloc/bloc.dart';
 import '../widgets/widgets.dart';
+import 'ip_input_page.dart';
 
 class ConnectPage extends StatelessWidget {
-  const ConnectPage({super.key});
+  const ConnectPage({
+    Key? key,
+    required this.deviceConnectionBloc,
+  }) : super(key: key);
+  final DeviceConnectionBloc deviceConnectionBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +27,20 @@ class ConnectPage extends StatelessWidget {
             children: <Widget>[
               const SizedBox(),
               Image.asset('lib/assets/images/tap_app_logo.webp'),
+              CupertinoButton(
+                child: const Text("ip"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BlocProvider<DeviceConnectionBloc>.value(
+                        value: deviceConnectionBloc,
+                        child: const IpInputPage(),
+                      ),
+                    ),
+                  );
+                },
+              ),
               SafeArea(
                 child: BlocConsumer<DeviceConnectionBloc, DeviceConnectionState>(
                   listener: (context, state) {

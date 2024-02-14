@@ -60,7 +60,9 @@ class TapApp extends StatelessWidget {
                         create: (context) => modelLoadBloc,
                       ),
                     ],
-                    child: const ConnectPage(),
+                    child: ConnectPage(
+                      deviceConnectionBloc: deviceConnectionBloc,
+                    ),
                   );
                 },
                 routes: [

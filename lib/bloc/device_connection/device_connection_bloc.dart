@@ -19,6 +19,14 @@ class DeviceConnectionBloc extends Bloc<DeviceConnectionEvent, DeviceConnectionS
         await _deviceConnectionStarted(emit);
       } else if (event is DeviceDisconnectionStarted) {
         await _deviceDisconnctionStarted(emit);
+      } else if (event is IPAdressSet) {
+        resolvedBonsoirService = ResolvedBonsoirService(
+          ip: event.ip,
+          port: 12345,
+          name: 'tapApp2',
+          type: '_tapapp._tcp',
+        );
+        ;
       }
     });
   }
@@ -26,8 +34,8 @@ class DeviceConnectionBloc extends Bloc<DeviceConnectionEvent, DeviceConnectionS
   final DataProvider dataProvider;
   final DeviceCommunicationReceiveBloc deviceCommunicationReceiveBloc;
 
-  static const _resolvedBonsoirService = ResolvedBonsoirService(
-    ip: '172.20.10.2',
+  var resolvedBonsoirService = ResolvedBonsoirService(
+    ip: '10.163.181.36',
     port: 12345,
     name: 'tapApp2',
     type: '_tapapp._tcp',
@@ -45,7 +53,7 @@ class DeviceConnectionBloc extends Bloc<DeviceConnectionEvent, DeviceConnectionS
       print(discoveredServices);
 
       if (discoveredServices.isEmpty) {
-        discoveredServices.add(_resolvedBonsoirService);
+        discoveredServices.add(resolvedBonsoirService);
       }
 
       final isConnected = await dataProvider.connectToDevice(
